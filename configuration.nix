@@ -129,23 +129,20 @@
   programs.ssh.extraConfig = ''
     Host *
       AddKeysToAgent yes
-      IdentityFile /home/vyrx/.ssh/id_rsa
-      IdentityFile /home/vyrx/.ssh/aur_key
   '';
-
   # setting up tlp
-  services.tlp = {
-    enable = true;
-    settings = {
-      # Keep battery healthy capped at 60%
-      START_CHARGE_THRESH_BAT0 = 55;
-      STOP_CHARGE_THRESH_BAT0 = 60;
-
-      # Simple speed profile toggle (Max speed on wall, battery saver on go)
-      CPU_SCALING_GOVERNOR_ON_AC = "performance";
-      CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
-    };
-  };
+  # services.tlp = {
+  #   enable = true;
+  #   settings = {
+  #     # Keep battery healthy capped at 60%
+  #     START_CHARGE_THRESH_BAT0 = 55;
+  #     STOP_CHARGE_THRESH_BAT0 = 60;
+  #
+  #     # Simple speed profile toggle (Max speed on wall, battery saver on go)
+  #     CPU_SCALING_GOVERNOR_ON_AC = "performance";
+  #     CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
+  #   };
+  # };
 
   # Correct way to instruct sudo to preserve your editor variable in NixOS
   programs.neovim.enable = true;
@@ -231,6 +228,7 @@
     libnotify
     mpv
     yt-dlp
+    hyprpicker
     gnumake
     tmux
     imagemagick

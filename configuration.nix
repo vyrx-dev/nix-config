@@ -1,10 +1,13 @@
-{ config, pkgs, lib, inputs, ... }:
-
 {
-  imports =
-    [
-      ./hardware-configuration.nix
-    ];
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}: {
+  imports = [
+    ./hardware-configuration.nix
+  ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -17,15 +20,13 @@
   time.timeZone = "Asia/Kolkata";
 
   hardware.bluetooth.enable = true;
- services.upower.enable = true;
- services.power-profiles-daemon.enable = true;
-
+  # services.upower.enable = true;
+  # services.power-profiles-daemon.enable = true;
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
 
   i18n.extraLocaleSettings = {
-
     LC_ADDRESS = "en_IN";
     LC_IDENTIFICATION = "en_IN";
     LC_MEASUREMENT = "en_IN";
@@ -55,29 +56,27 @@
 
     # 2. Safe performance-optimized extensions
     enabledExtensions = with spicePkgs.extensions; [
-      adblockify    # Blocks audio and visual banner ads automatically
-      hidePodcasts  # Strips out unwanted podcast bloat panels from your sidebar
-      shuffle       # Fixes Spotify's broken native shuffle algorithms
+      adblockify # Blocks audio and visual banner ads automatically
+      hidePodcasts # Strips out unwanted podcast bloat panels from your sidebar
+      shuffle # Fixes Spotify's broken native shuffle algorithms
     ];
   };
 
-
- # setting up keyd
+  # setting up keyd
   services.keyd = {
     enable = true;
     keyboards = {
-     default = {
-       ids = [ "*" ];
-       settings = {
-         main = {
-           capslock = "overload(control, esc)";
-           escape = "capslock";
-	 };
-       };
-     };
-   };
-};
-
+      default = {
+        ids = ["*"];
+        settings = {
+          main = {
+            capslock = "overload(control, esc)";
+            escape = "capslock";
+          };
+        };
+      };
+    };
+  };
 
   # Enable the X11 windowing system.
   services.xserver.enable = false;
@@ -95,18 +94,17 @@
     pulse.enable = true;
   };
 
-
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users."vyrx" = {
     isNormalUser = true;
     description = "vyrx";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = ["networkmanager" "wheel" "i2c"];
     packages = with pkgs; [
-    #  thunderbird
+      #  thunderbird
     ];
   };
 
-   fonts.packages = with pkgs; [
+  fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono
   ];
 
@@ -114,23 +112,41 @@
   programs.fish.enable = true;
   users.defaultUserShell = pkgs.fish;
 
-# Enables a secure, universal background ssh-agent managed by systemd
+  # 1. Force the Linux Kernel to load the display data channel bus drivers on boot
+  hardware.i2c.enable = true;
+
+  # services.udev.packages = [
+  #     (pkgs.writeTextFile {
+  #       name = "i2c-udev-rules";
+  #       destination = "/etc/udev/rules.d/70-i2c.rules";
+  #       text = ''ACTION=="add", KERNEL=="i2c-[0-9]*", TAG+="uaccess"'';
+  #     })
+  #   ];
+
+  # Enables a secure, universal background ssh-agent managed by systemd
   programs.ssh.startAgent = true;
 
-  # # setting up tlp 
-  # services.tlp = {
-  #   enable = true;
-  #   settings = {
-  #     # Keep battery healthy capped at 60%
-  #     START_CHARGE_THRESH_BAT0 = 55;
-  #     STOP_CHARGE_THRESH_BAT0 = 60;
-  #
-  #     # Simple speed profile toggle (Max speed on wall, battery saver on go)
-  #     CPU_SCALING_GOVERNOR_ON_AC = "performance";
-  #     CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
-  #   };
-  # };
-  
+  programs.ssh.extraConfig = ''
+    Host *
+      AddKeysToAgent yes
+      IdentityFile /home/vyrx/.ssh/id_rsa
+      IdentityFile /home/vyrx/.ssh/aur_key
+  '';
+
+  # setting up tlp
+  services.tlp = {
+    enable = true;
+    settings = {
+      # Keep battery healthy capped at 60%
+      START_CHARGE_THRESH_BAT0 = 55;
+      STOP_CHARGE_THRESH_BAT0 = 60;
+
+      # Simple speed profile toggle (Max speed on wall, battery saver on go)
+      CPU_SCALING_GOVERNOR_ON_AC = "performance";
+      CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
+    };
+  };
+
   # Correct way to instruct sudo to preserve your editor variable in NixOS
   programs.neovim.enable = true;
   programs.neovim.defaultEditor = true;
@@ -140,7 +156,7 @@
     Defaults env_keep += "SUDO_EDITOR"
   '';
 
- programs.git = {
+  programs.git = {
     enable = true;
     config = {
       user.name = "vyrx";
@@ -155,7 +171,7 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-# ================================================================================================
+  # ================================================================================================
   # SWAY & WAYLAND SYSTEM BASE
   # ================================================================================================
 
@@ -164,16 +180,16 @@
   xdg.portal = {
     enable = true;
     wlr.enable = true; # CRITICAL: Do not remove or use mkForce false! Required for Sway screensharing and screenshots.
-    
+
     config = {
       # Fallback defaults to prevent 30-second app initialization freeze timeouts
-      common.default = [ "gtk" ];
-      sway.default = lib.mkForce [ "wlr" "gtk" ]; 
+      common.default = ["gtk"];
+      sway.default = lib.mkForce ["wlr" "gtk"];
     };
-    
-    extraPortals = [ 
+
+    extraPortals = [
       pkgs.xdg-desktop-portal-gtk
-      pkgs.xdg-desktop-portal-gnome 
+      pkgs.xdg-desktop-portal-gnome
     ];
   };
 
@@ -181,7 +197,7 @@
   environment.sessionVariables = {
     NIXOS_OZONE_WL = "1";
     WLR_NO_HARDWARE_CURSORS = "1"; # Critical: Stops your Nvidia GPU from lagging out your cursor!
-    
+
     # Environment variables forcing cross-distro tools to stick to dark templates
     GTK_THEME = "Adwaita-dark";
     XCURSOR_THEME = "Bibata-Modern-Ice";
@@ -201,60 +217,85 @@
     jq
     bat
     btop
-    brave  
+    brave
+    anki
     cmake
     cliphist
+    transmission_4-gtk
     deno
-    eza  
+    eza
     fd
     fastfetch
     fzf
-    fuzzel  
+    fuzzel
+    libnotify
+    mpv
+    yt-dlp
     gnumake
     tmux
+    imagemagick
+    obsidian
+    localsend
     lazygit
     go
-    gopls 
-    ghostty 
-    github-cli 
+    gopls
+    ghostty
+    github-cli
+    foliate
+    ddcutil
     kanshi
     # keychain
-    kitty 
-    # mako  
+    kitty
+    # mako
     mpc
     mpd-mpris
     nodejs
     obs-studio
     opencode
-    playerctl 
-    ripgrep 
+    playerctl
+    ripgrep
     rmpc
-    spotify  
+    spotify
     starship
-    # swaybg  
+    # swaybg
     vesktop
     vicinae
     vim
-    # waybar 
+    # waybar
     wget
     wl-clipboard
-    xwayland-satellite  
-    yazi  
-    zed-editor 
+    xwayland-satellite
+    yazi
+    zed-editor
     swaylock-effects
     zoxide
-    heroic      # For your Epic, GOG, and custom repack installations
-    mangohud    # Your FPS, temperature, and performance overlay tracker
-    # --- Add these to fix your Neovim errors ---
-    # luacheck          # Fixes luacheck error
-    # stylua            # Fixes stylua error
-    # python311Packages.flake8 # Fixes flake8 error
-    # black             # Fixes black error
-    # revive            # Fixes revive error for Go linting
-    # tresitter
-    bibata-cursors             # The official Material/Ice cursor framework package
-    adwaita-icon-theme         # Essential fallback graphical system assets
-    glib                       # Injects the 'gsettings' binary to force GTK4 changes
+    heroic
+    mangohud
+    nixd
+    alejandra
+
+    hadolint
+    bibata-cursors # The official Material/Ice cursor framework package
+    adwaita-icon-theme # Essential fallback graphical system assets
+    inputs.zen-browser.packages."x86_64-linux".default
+    glib # Injects the 'gsettings' binary to force GTK4 changes
+
+    # ================================================================================================
+    # DEVELOPMENT TOOLS: NATIVE FORMATTERS & LINTERS (Verified 2026 Schema)
+    # ================================================================================================
+    lua54Packages.luacheck # Verified: Lua linter package
+    stylua # Verified: Lua formatter binary
+    lua-language-server
+    python3Packages.flake8 # Verified: Python linter
+    python3Packages.black # Verified: Python formatter
+    revive # Verified: Go backend source linter
+    gofumpt # Verified: Stricter Go format binary
+    prettier # Verified: Top-level standalone multi-language formatter
+    eslint_d # Verified: Top-level fast JS/TS linter daemon
+    fixjson # Verified: JSON utility
+    shellcheck # Verified: Bash/Fish script validation tool
+    shfmt # Verified: Shell script auto-indenter
+    hadolint # Verified: Dockerfile security audit engine
   ];
 
   # display manager
@@ -262,7 +303,7 @@
     enable = true;
     settings = {
       initial_session = {
-        command = "${pkgs.sway}/bin/sway"; 
+        command = "${pkgs.sway}/bin/sway";
         user = "vyrx";
       };
       default_session = {
@@ -283,19 +324,34 @@
     TTYVTDisallocate = true;
   };
 
-# Enable KDE Connect and open required firewall ports
-     programs.kdeconnect.enable = true;
+  # stop hard shutdown pressing power button
+  services.logind.settings.Login.HandlePowerKey = "ignore";
 
-    nix.settings = {
-        experimental-features = [ "nix-command" "flakes" ];
-        extra-substituters = [ "https://noctalia.cachix.org" ];
-        extra-trusted-public-keys = [ "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4=" ];
-       # FIXED: Grants your user profile native compilation rights without sudo restrictions
-       trusted-users = [ "root" "vyrx" ];
-  };
-    programs.noctalia = {
-        enable = true;
+  # Enable KDE Connect and open required firewall ports
+  programs.kdeconnect.enable = true;
+
+  # ================================================================================================
+  # NIX PACKAGE MANAGER CORE CONFIGURATION
+  # ================================================================================================
+
+  nix = {
+    settings = {
+      experimental-features = ["nix-command" "flakes"];
+      extra-substituters = ["https://noctalia.cachix.org"];
+      extra-trusted-public-keys = ["noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="];
+      trusted-users = ["root" "vyrx"];
+      auto-optimise-store = true;
     };
+
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 14d";
+    };
+  };
+  programs.noctalia = {
+    enable = true;
+  };
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
@@ -303,7 +359,6 @@
   #   enable = true;
   #   enableSSHSupport = true;
   # };
-
 
   # ================================================================================================
   # GAMING & PERFORMANCE ENGINE
@@ -324,10 +379,10 @@
   # 3. Essential Graphic Drivers & 32-bit Compatibility for Steam
   hardware.graphics = {
     enable = true;
-    enable32Bit = true; 
+    enable32Bit = true;
   };
 
-  services.xserver.videoDrivers = [ "nvidia" ];
+  services.xserver.videoDrivers = ["nvidia"];
 
   hardware.nvidia = {
     modesetting.enable = true;
@@ -336,8 +391,8 @@
 
     # Laptop Hybrid Routing: Wakes up the RTX 2050 when launching games
     prime = {
-      amdgpuBusId = "PCI:4:0:0";  # Verified from your lspci output!
-      nvidiaBusId = "PCI:1:0:0";  # Verified from your lspci output!
+      amdgpuBusId = "PCI:4:0:0"; # Verified from your lspci output!
+      nvidiaBusId = "PCI:1:0:0"; # Verified from your lspci output!
       offload = {
         enable = true;
         enableOffloadCmd = true;
@@ -346,20 +401,19 @@
   };
 
   # Enable the OpenSSH daemon.
-  services.openssh = {
-    enable = true;
-    settings = {
-      PermitRootLogin = "no";
-      PasswordAuthentication = true; # Keep true for now so you don't accidentally lock yourself out!
-    };
-  };
+  # services.openssh = {
+  #   enable = true;
+  #   settings = {
+  #     PermitRootLogin = "no";
+  #     PasswordAuthentication = true; # Keep true for now so you don't accidentally lock yourself out!
+  #   };
+  # };
 
   # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
+  networking.firewall.allowedTCPPorts = [53317];
+  networking.firewall.allowedUDPPorts = [53317];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
   system.stateVersion = "26.05"; # Did you read the comment?
 }
-

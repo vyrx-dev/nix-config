@@ -20,7 +20,7 @@
   time.timeZone = "Asia/Kolkata";
 
   hardware.bluetooth.enable = true;
-  # services.upower.enable = true;
+  services.upower.enable = true;
   # services.power-profiles-daemon.enable = true;
 
   # Select internationalisation properties.
@@ -164,6 +164,8 @@
   };
 
   programs.thunar.enable = true;
+  services.tumbler.enable = true;
+  environment.pathsToLink = ["/share/thumbnailers"];
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -214,6 +216,8 @@
     jq
     bat
     btop
+    ffmpegthumbnailer
+    evince
     brave
     anki
     cmake

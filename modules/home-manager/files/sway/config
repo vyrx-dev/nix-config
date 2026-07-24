@@ -188,12 +188,7 @@ bindsym $mod+Shift+BackSpace exec ~/Scripts/run-scrcpy mirror
 bindsym $mod+Ctrl+BackSpace exec ~/Scripts/run-scrcpy webcam
 
 # ─── Others ───
-bindsym $mod+BackSpace exec ~/Scripts/toggle-terminal-transparency
-bindsym $mod+Alt+n exec $ipc nightlight-toggle
-bindsym $mod+s exec $ipc panel-toggle control-center audio
-bindsym $mod+i exec $ipc caffeine-toggle
-bindsym $mod+period exec $ipc panel-toggle control-center network
-bindsym $mod+comma exec $ipc panel-toggle control-center system
+bindsym $mod+BackSpace exec ~/Scripts/toggle-wlsunset
 
 # ─── Wallpaper ───
 bindsym Ctrl+Alt+Space exec ~/Scripts/set-wallpaper random
@@ -201,7 +196,7 @@ bindsym $mod+Ctrl+Shift+Space exec ~/Scripts/set-wallpaper choose
 
 # ─── Session & Power ───
 bindsym $mod+Alt+l exec swaylock
-bindsym $mod+escape exec $ipc panel-toggle session
+bindsym $mod+escape exec ~/Scripts/powermenu
 bindsym $mod+Shift+c reload
 bindsym $mod+Shift+e exec swaynag -t warning -m 'Exit sway?' -B 'Yes' 'swaymsg exit'
 bindsym --locked XF86PowerOff exec systemctl suspend && swaylock

@@ -166,10 +166,10 @@
     enable = true;
     settings = {
       # Auto-login into Sway on first boot; tuigreet available for session switching
-      initial_session = {
-        command = "${pkgs.sway}/bin/sway";
-        user = "vyrx";
-      };
+      # initial_session = {
+      #   command = "${pkgs.sway}/bin/sway";
+      #   user = "vyrx";
+      # };
       default_session = {
         command = let
           sessions = "${config.services.displayManager.sessionData.desktops}/share/wayland-sessions";
@@ -393,9 +393,9 @@
     playerctl
     ripgrep
     wget
-    # vicinae
     spotify
     antigravity
+    wlsunset
   ];
 
   # ╭───────────────────────────────────────────────────────────────────────╮

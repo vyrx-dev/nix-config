@@ -1,0 +1,44 @@
+#!/bin/sh
+
+TMP_DIR="/tmp/rmpc"
+ALBUM_ART_PATH="$TMP_DIR/notification_cover.jpg"
+LRCLIB_INSTANCE="https://lrclib.net"
+
+mkdir -p "$TMP_DIR"
+
+if rmpc albumart --output "$ALBUM_ART_PATH" 2>/dev/null; then
+    ICON="$ALBUM_ART_PATH"
+else
+    ICON="audio-x-generic"
+fi
+
+notify-send -i "$ICON" "Now Playing" "$ARTIST - $TITLE"
+
+if [ "$HAS_LRC" = "false" ]; then
+    mkdir -p "$(dirname "$LRC_FILE")"
+
+    LYRICS="$(curl -X GET -sG \
+        -H "Lrclib-Client: rmpc-$VERSION" \
+        --data-urlencode "artist_name=$ARTIST" \
+        --data-urlencode "track_name=$TITLE" \
+        --data-urlencode "album_name=$ALBUM" \
+        "$LRCLIB_INSTANCE/api/get" | jq -r '.syncedLyrics')"
+
+    if [ -z "$LYRICS" ]; then
+        rmpc remote --pid "$PID" status "No lyrics found for $ARTIST - $TITLE" --level warn
+        exit
+    fi
+
+    if [ "$LYRICS" = "null" ]; then
+        rmpc remote --pid "$PID" status "Lyrics not available for $ARTIST - $TITLE" --level warn
+        exit
+    fi
+
+    echo "[ar:$ARTIST]" > "$LRC_FILE"
+    echo "[al:$ALBUM]" >> "$LRC_FILE"
+    echo "[ti:$TITLE]" >> "$LRC_FILE"
+    echo "$LYRICS" | sed -E '/^\[(ar|al|ti):/d' >> "$LRC_FILE"
+
+    rmpc remote --pid "$PID" indexlrc --path "$LRC_FILE"
+    rmpc remote --pid "$PID" status "Downloaded lyrics for $TITLE" --level info
+fi

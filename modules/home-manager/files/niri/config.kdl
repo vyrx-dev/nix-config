@@ -1,0 +1,361 @@
+// Niri Configuration
+// https://github.com/YaLTeR/niri/wiki/Configuration
+
+
+// ╭───────────────────────────────────────────────────────────────────────╮
+// │ GENERAL                                                               │
+// ╰───────────────────────────────────────────────────────────────────────╯
+
+prefer-no-csd
+screenshot-path null
+
+hotkey-overlay {
+    skip-at-startup
+}
+
+debug {
+    honor-xdg-activation-with-invalid-serial
+}
+
+
+// ╭───────────────────────────────────────────────────────────────────────╮
+// │ ENVIRONMENT                                                           │
+// ╰───────────────────────────────────────────────────────────────────────╯
+
+environment {
+    ELECTRON_OZONE_PLATFORM_HINT "auto"
+    QT_QPA_PLATFORM "wayland"
+    QT_WAYLAND_DISABLE_WINDOWDECORATION "1"
+    XDG_SESSION_TYPE "wayland"
+    XDG_CURRENT_DESKTOP "niri"
+    QT_QPA_PLATFORMTHEME "qt6ct"
+    TERMINAL "kitty"
+    XCURSOR_THEME "Bibata-Modern-Ice"
+    XCURSOR_SIZE "24"
+}
+
+
+// ╭───────────────────────────────────────────────────────────────────────╮
+// │ INPUT                                                                 │
+// ╰───────────────────────────────────────────────────────────────────────╯
+
+input {
+    keyboard {
+        xkb {
+            layout "us"
+        }
+        numlock
+        repeat-delay 200
+        repeat-rate 60
+    }
+
+    touchpad {
+        tap
+        natural-scroll
+    }
+
+    focus-follows-mouse
+    workspace-auto-back-and-forth
+}
+
+
+// ╭───────────────────────────────────────────────────────────────────────╮
+// │ OUTPUTS                                                               │
+// ╰───────────────────────────────────────────────────────────────────────╯
+
+output "eDP-1" {
+    mode "1920x1080@144.003"
+    scale 1
+    position x=0 y=0
+}
+
+output "HDMI-A-1" {
+    mode "1920x1080@100.000"
+    scale 1
+    // transform "90"
+    position x=1920 y=0
+}
+
+
+// ╭───────────────────────────────────────────────────────────────────────╮
+// │ STARTUP APPLICATIONS                                                  │
+// ╰───────────────────────────────────────────────────────────────────────╯
+
+spawn-at-startup "dbus-update-activation-environment" "--systemd" "--all"
+spawn-at-startup "systemctl --user import-environment PATH XDG_DATA_DIRS"
+spawn-at-startup "noctalia"
+spawn-at-startup "vicinae" "server"
+spawn-sh-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
+spawn-sh-at-startup "swayidle -w timeout 300 'swaylock -f' timeout 600 'niri msg action power-off-monitors' resume 'niri msg action power-on-monitors' before-sleep 'swaylock -f'"
+// spawn-at-startup "waybar"
+// spawn-at-startup "mako"
+spawn-sh-at-startup "wl-clip-persist --clipboard regular"
+spawn-sh-at-startup "wl-paste --watch cliphist store"
+spawn-at-startup "kdeconnect-indicator"
+spawn-sh-at-startup "$HOME/Scripts/battery-monitor"
+
+
+// ╭───────────────────────────────────────────────────────────────────────╮
+// │ LAYOUT & APPEARANCE                                                   │
+// ╰───────────────────────────────────────────────────────────────────────╯
+
+layout {
+    gaps 7
+    center-focused-column "never"
+    default-column-width { proportion 0.5; }
+    background-color "transparent"
+
+    preset-column-widths {
+        proportion 0.33333
+        proportion 0.5
+        proportion 0.66667
+    }
+
+    struts {}
+
+    focus-ring {
+        on
+        width 1
+        active-color "#ffffff66"
+        inactive-color "#ffffff11"
+    }
+}
+
+overview {
+    backdrop-color "#1a1a1a"
+    zoom 0.3
+    workspace-shadow {
+        off
+    }
+}
+
+blur {
+    passes 3
+    offset 2.0
+    noise 0.03
+    saturation 1.0
+}
+
+
+// ╭───────────────────────────────────────────────────────────────────────╮
+// │ ANIMATIONS                                                            │
+// ╰───────────────────────────────────────────────────────────────────────╯
+
+animations {
+    workspace-switch {
+        spring damping-ratio=1.0 stiffness=1000 epsilon=0.0001
+    }
+    window-open {
+        duration-ms 100
+        curve "ease-out-quad"
+    }
+    window-close {
+        duration-ms 100
+        curve "ease-out-cubic"
+    }
+    horizontal-view-movement {
+        spring damping-ratio=1.0 stiffness=900 epsilon=0.0001
+    }
+    window-movement {
+        spring damping-ratio=1.0 stiffness=800 epsilon=0.0001
+    }
+    window-resize {
+        spring damping-ratio=1.0 stiffness=1000 epsilon=0.0001
+    }
+    config-notification-open-close {
+        spring damping-ratio=0.6 stiffness=1200 epsilon=0.001
+    }
+    screenshot-ui-open {
+        duration-ms 300
+        curve "ease-out-quad"
+    }
+    overview-open-close {
+        spring damping-ratio=1.0 stiffness=900 epsilon=0.0001
+    }
+}
+
+
+// ╭───────────────────────────────────────────────────────────────────────╮
+// │ LAYER RULES                                                           │
+// ╰───────────────────────────────────────────────────────────────────────╯
+
+// Blur behind waybar and vicinae
+layer-rule {
+    match namespace="waybar"
+    match namespace="vicinae"
+    background-effect {
+        blur true
+        xray false
+    }
+}
+
+// Waybar shadow & rounded corners
+layer-rule {
+    match namespace="waybar"
+    match at-startup=true
+    opacity 0.90
+
+    shadow {
+        on
+        softness 10
+        spread 5
+        offset x=0 y=5
+    }
+
+    geometry-corner-radius 10
+}
+
+// Noctalia shell surfaces
+layer-rule {
+    match namespace="^noctalia-(bar-[^\"]+|notification|dock|panel)$"
+    background-effect {
+        xray false
+        //blur false
+    }
+}
+
+
+// ╭───────────────────────────────────────────────────────────────────────╮
+// │ WINDOW RULES                                                          │
+// ╰───────────────────────────────────────────────────────────────────────╯
+
+// Global defaults
+window-rule {
+    geometry-corner-radius 0
+    open-maximized true
+    clip-to-geometry true
+}
+
+// Global blur & opacity
+window-rule {
+    opacity 0.90
+    background-effect {
+        blur true
+        xray false
+    }
+}
+
+// YouTube – no transparency
+window-rule {
+    opacity 1.0
+    match app-id="chrome-youtube.com__-Default"
+    match app-id="helium"
+}
+
+// Transparent applications
+window-rule {
+    draw-border-with-background false
+    match app-id="zed"
+    match app-id="code"
+    // match app-id="ghostty"
+    match app-id="vesktop"
+    match app-id="org.qbittorrent.qBittorrent"
+    match app-id="thunar"
+    match app-id="org.gnome.Nautilus"
+    match app-id="zathura"
+    match app-id="obsidian"
+    match app-id="obs-studio"
+    opacity 0.95
+}
+
+// Terminal windows
+window-rule {
+    match app-id="com.mitchellh.ghostty"
+    open-maximized false
+    draw-border-with-background false
+    default-column-width { proportion 0.5; }
+}
+
+// Floating dialogs & popups
+window-rule {
+    match app-id="confirm"
+    match app-id="satty"
+    match app-id="com.network.manager"
+    match app-id="blueman-manager"
+    match app-id="nm-connection-editor"
+    match app-id="localsend"
+    match app-id="Hello"
+    match app-id="xdg-desktop-portal-gtk"
+    match app-id="system-config-printer"
+    match app-id="ghostty_journalctl"
+    match title=r#".*Extension.*Bitwarden.*"#
+    match app-id="helium-keep"
+    match app-id="pavucontrol"
+    match app-id="thunar"
+    match app-id="easyeffects"
+    match title="Oklch Color Picker"
+    open-floating true
+    default-column-width { proportion 0.6; }
+    default-window-height { proportion 0.7; }
+}
+
+// Floating terminal apps
+window-rule {
+    match app-id="ghostty" title="rmpc-music"
+    match app-id="ghostty" title="toofan-tui"
+    match app-id="ghostty" title="btop-system"
+    match app-id="ghostty" title="yazi-files"
+    match app-id="ghostty" title="webapp-list"
+    match app-id="ghostty" title="gh-notify"
+    open-floating true
+    default-column-width { proportion 0.6; }
+    default-window-height { proportion 0.7; }
+}
+
+// gh-dash fullscreen
+window-rule {
+    match app-id="ghostty" title="gh-dash"
+    open-fullscreen true
+}
+
+// Picture-in-Picture
+window-rule {
+    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
+    match app-id="zen" title="^Picture-in-Picture$"
+    open-floating true
+    open-focused false
+    default-floating-position x=32 y=32 relative-to="bottom-right"
+    default-column-width { proportion 0.3; }
+    default-window-height { proportion 0.3; }
+}
+
+// Block Bitwarden from screen capture
+window-rule {
+    match app-id=r#"Bitwarden"#
+    block-out-from "screen-capture"
+}
+
+// Noctalia settings window
+window-rule {
+    match app-id="dev.noctalia.Noctalia.Settings"
+    open-floating true
+    default-column-width { fixed 1080; }
+    default-window-height { fixed 920; }
+}
+
+// Android Emulator
+window-rule {
+    match app-id="Emulator"
+    open-maximized false
+    opacity 1.0
+    open-floating true
+    default-column-width { fixed 500; }
+    default-window-height { fixed 1054; }
+}
+
+// scrcpy (Android screen mirror)
+window-rule {
+    match app-id="scrcpy"
+    open-maximized false
+    default-column-width { fixed 478; }
+    default-window-height { fixed 1080; }
+}
+
+
+// ╭───────────────────────────────────────────────────────────────────────╮
+// │ KEYBINDINGS                                                           │
+// ╰───────────────────────────────────────────────────────────────────────╯
+
+// Switch by commenting one out:
+// include "binds-noctalia.kdl"
+include "binds-custom.kdl"

@@ -9,23 +9,32 @@
     ./hardware-configuration.nix
   ];
 
-  # Bootloader.
+  # ╭───────────────────────────────────────────────────────────────────────╮
+  # │ BOOT & FILESYSTEM                                                     │
+  # ╰───────────────────────────────────────────────────────────────────────╯
+
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-
   boot.initrd.luks.devices."luks-7428c180-79d2-469a-83e0-39d1cb4366c5".device = "/dev/disk/by-uuid/7428c180-79d2-469a-83e0-39d1cb4366c5";
+
+  # ╭───────────────────────────────────────────────────────────────────────╮
+  # │ NETWORKING                                                            │
+  # ╰───────────────────────────────────────────────────────────────────────╯
+
   networking.hostName = "nixos-btw";
   networking.networkmanager.enable = true;
 
+  # KDE Connect — open firewall ports for device pairing
+  programs.kdeconnect.enable = true;
+  networking.firewall.allowedTCPPorts = [53317];
+  networking.firewall.allowedUDPPorts = [53317];
+
+  # ╭───────────────────────────────────────────────────────────────────────╮
+  # │ LOCALE & TIME                                                         │
+  # ╰───────────────────────────────────────────────────────────────────────╯
+
   time.timeZone = "Asia/Kolkata";
-
-  hardware.bluetooth.enable = true;
-  services.upower.enable = true;
-  # services.power-profiles-daemon.enable = true;
-
-  # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
-
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "en_IN";
     LC_IDENTIFICATION = "en_IN";
@@ -38,53 +47,54 @@
     LC_TIME = "en_IN";
   };
 
-  # ================================================================================================
-  # SPOTIFY AUDIO CUSTOMIZATION (Standard Look with Extensions & Marketplace)
-  # ================================================================================================
-  programs.spicetify = let
-    spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
-  in {
+  # ╭───────────────────────────────────────────────────────────────────────╮
+  # │ HARDWARE                                                              │
+  # ╰───────────────────────────────────────────────────────────────────────╯
+
+  hardware.bluetooth.enable = true;
+  hardware.i2c.enable = true; # Required for ddcutil (monitor brightness control)
+
+  # Battery charge limit — prevents degradation by capping at 60%
+  services.udev.extraRules = ''
+    ACTION=="add|change", KERNEL=="BAT0", SUBSYSTEM=="power_supply", ATTR{charge_control_end_threshold}="60"
+  '';
+
+  services.blueman.enable = true;
+  services.upower.enable = true;
+  services.power-profiles-daemon.enable = true;
+
+  # ╭───────────────────────────────────────────────────────────────────────╮
+  # │ GRAPHICS (NVIDIA PRIME OFFLOAD)                                       │
+  # ╰───────────────────────────────────────────────────────────────────────╯
+
+  # Essential for Steam 32-bit compatibility and Wayland native rendering
+  hardware.graphics = {
     enable = true;
-
-    # Explicitly left blank to preserve the raw, standard stock Spotify layout
-    # Do not add theme or colorScheme options here
-
-    # 1. FIXED: Marketplace is a custom app, so it must use the enabledCustomApps list!
-    enabledCustomApps = with spicePkgs.apps; [
-      marketplace
-    ];
-
-    # 2. Safe performance-optimized extensions
-    enabledExtensions = with spicePkgs.extensions; [
-      adblockify # Blocks audio and visual banner ads automatically
-      hidePodcasts # Strips out unwanted podcast bloat panels from your sidebar
-      shuffle # Fixes Spotify's broken native shuffle algorithms
-    ];
+    enable32Bit = true;
   };
 
-  # setting up keyd
-  services.keyd = {
-    enable = true;
-    keyboards = {
-      default = {
-        ids = ["*"];
-        settings = {
-          main = {
-            capslock = "overload(control, esc)";
-            escape = "capslock";
-          };
-        };
+  services.xserver.videoDrivers = ["nvidia"];
+
+  hardware.nvidia = {
+    modesetting.enable = true;
+    open = false; # Proprietary drivers offer optimal performance for the RTX 2050
+    package = config.boot.kernelPackages.nvidiaPackages.stable;
+
+    # Hybrid GPU routing: AMD iGPU for desktop, RTX 2050 offloaded for games
+    prime = {
+      amdgpuBusId = "PCI:4:0:0";
+      nvidiaBusId = "PCI:1:0:0";
+      offload = {
+        enable = true;
+        enableOffloadCmd = true;
       };
     };
   };
 
-  # Enable the X11 windowing system.
-  services.xserver.enable = false;
+  # ╭───────────────────────────────────────────────────────────────────────╮
+  # │ AUDIO                                                                 │
+  # ╰───────────────────────────────────────────────────────────────────────╯
 
-  # Enable CUPS to print documents.
-  services.printing.enable = false;
-
-  # Enable sound with pipewire.
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
@@ -94,96 +104,26 @@
     pulse.enable = true;
   };
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users."vyrx" = {
-    isNormalUser = true;
-    description = "vyrx";
-    extraGroups = ["networkmanager" "wheel" "i2c"];
-    packages = with pkgs; [
-      #  thunderbird
-    ];
-  };
+  # ╭───────────────────────────────────────────────────────────────────────╮
+  # │ DISPLAY SERVER & WAYLAND                                              │
+  # ╰───────────────────────────────────────────────────────────────────────╯
 
-  fonts.packages = with pkgs; [
-    nerd-fonts.jetbrains-mono
-  ];
+  services.xserver.enable = false;
 
-  # setting fish
-  programs.fish.enable = true;
-  users.defaultUserShell = pkgs.fish;
-
-  # 1. Force the Linux Kernel to load the display data channel bus drivers on boot
-  hardware.i2c.enable = true;
-
-  # services.udev.packages = [
-  #     (pkgs.writeTextFile {
-  #       name = "i2c-udev-rules";
-  #       destination = "/etc/udev/rules.d/70-i2c.rules";
-  #       text = ''ACTION=="add", KERNEL=="i2c-[0-9]*", TAG+="uaccess"'';
-  #     })
-  #   ];
-
-  # Enables a secure, universal background ssh-agent managed by systemd
-  programs.ssh.startAgent = true;
-
-  programs.ssh.extraConfig = ''
-    Host *
-      AddKeysToAgent yes
-  '';
-  # setting up tlp
-  # services.tlp = {
-  #   enable = true;
-  #   settings = {
-  #     # Keep battery healthy capped at 60%
-  #     START_CHARGE_THRESH_BAT0 = 55;
-  #     STOP_CHARGE_THRESH_BAT0 = 60;
-  #
-  #     # Simple speed profile toggle (Max speed on wall, battery saver on go)
-  #     CPU_SCALING_GOVERNOR_ON_AC = "performance";
-  #     CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
-  #   };
-  # };
-
-  # Correct way to instruct sudo to preserve your editor variable in NixOS
-  programs.neovim.enable = true;
-  programs.neovim.defaultEditor = true;
-
-  environment.variables.SUDO_EDITOR = "nvim";
-  security.sudo.extraConfig = ''
-    Defaults env_keep += "SUDO_EDITOR"
-  '';
-
-  programs.git = {
+  programs.sway = {
     enable = true;
-    config = {
-      user.name = "vyrx";
-      user.email = "theamit.969@gmail.com";
-      init.defaultBranch = "main";
-      pull.rebase = true;
-    };
+    wrapperFeatures.gtk = true; # Ensures GTK apps find themes, icons, and schemas
   };
-
-  programs.thunar.enable = true;
-  services.tumbler.enable = true;
-  environment.pathsToLink = ["/share/thumbnailers"];
-
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-
-  # ================================================================================================
-  # SWAY & WAYLAND SYSTEM BASE
-  # ================================================================================================
-
-  programs.sway.enable = true;
 
   xdg.portal = {
     enable = true;
-    wlr.enable = true; # CRITICAL: Do not remove or use mkForce false! Required for Sway screensharing and screenshots.
+    wlr.enable = true; # Required for Sway screensharing and screenshots
 
     config = {
-      # Fallback defaults to prevent 30-second app initialization freeze timeouts
+      # Prevents 30-second app init freeze when no default portal is set
       common.default = ["gtk"];
       sway.default = lib.mkForce ["wlr" "gtk"];
+      # niri portal config lives in modules/nixos/niri.nix
     };
 
     extraPortals = [
@@ -192,118 +132,28 @@
     ];
   };
 
-  # Forces Chromium, Electron, and Brave to run natively via Wayland instead of lagging in Xwayland
+  # Force Chromium/Electron/Brave to use native Wayland instead of XWayland
   environment.sessionVariables = {
     NIXOS_OZONE_WL = "1";
-    WLR_NO_HARDWARE_CURSORS = "1"; # Critical: Stops your Nvidia GPU from lagging out your cursor!
+    WLR_NO_HARDWARE_CURSORS = "1"; # Stops Nvidia GPU from lagging the cursor
 
-    # Environment variables forcing cross-distro tools to stick to dark templates
+    # Force GTK apps to use dark theme and Bibata cursor system-wide
     GTK_THEME = "Adwaita-dark";
     XCURSOR_THEME = "Bibata-Modern-Ice";
     XCURSOR_SIZE = "24";
   };
 
-  # ================================================================================================
-  # SYSTEM PACKAGES ARRAY
-  # ================================================================================================
+  # ╭───────────────────────────────────────────────────────────────────────╮
+  # │ DISPLAY MANAGER (greetd + tuigreet)                                   │
+  # ╰───────────────────────────────────────────────────────────────────────╯
 
-  environment.systemPackages = with pkgs; [
-    antigravity
-    satty
-    gpu-screen-recorder
-    slurp
-    grim
-    jq
-    bat
-    btop
-    ffmpegthumbnailer
-    evince
-    brave
-    anki
-    cmake
-    cliphist
-    transmission_4-gtk
-    deno
-    eza
-    fd
-    fastfetch
-    fzf
-    fuzzel
-    libnotify
-    mpv
-    yt-dlp
-    hyprpicker
-    gnumake
-    tmux
-    imagemagick
-    obsidian
-    localsend
-    lazygit
-    go
-    gopls
-    ghostty
-    github-cli
-    foliate
-    ddcutil
-    kanshi
-    # keychain
-    kitty
-    # mako
-    mpc
-    mpd-mpris
-    nodejs
-    obs-studio
-    opencode
-    playerctl
-    ripgrep
-    rmpc
-    spotify
-    starship
-    # swaybg
-    vesktop
-    vicinae
-    vim
-    # waybar
-    wget
-    wl-clipboard
-    xwayland-satellite
-    yazi
-    zed-editor
-    swaylock-effects
-    zoxide
-    heroic
-    mangohud
-    nixd
-    alejandra
+  # Prevent accidental hard-shutdown on power button press
+  services.logind.settings.Login.HandlePowerKey = "ignore";
 
-    hadolint
-    bibata-cursors # The official Material/Ice cursor framework package
-    adwaita-icon-theme # Essential fallback graphical system assets
-    inputs.zen-browser.packages."x86_64-linux".default
-    glib # Injects the 'gsettings' binary to force GTK4 changes
-
-    # ================================================================================================
-    # DEVELOPMENT TOOLS: NATIVE FORMATTERS & LINTERS (Verified 2026 Schema)
-    # ================================================================================================
-    lua54Packages.luacheck # Verified: Lua linter package
-    stylua # Verified: Lua formatter binary
-    lua-language-server
-    python3Packages.flake8 # Verified: Python linter
-    python3Packages.black # Verified: Python formatter
-    revive # Verified: Go backend source linter
-    gofumpt # Verified: Stricter Go format binary
-    prettier # Verified: Top-level standalone multi-language formatter
-    eslint_d # Verified: Top-level fast JS/TS linter daemon
-    fixjson # Verified: JSON utility
-    shellcheck # Verified: Bash/Fish script validation tool
-    shfmt # Verified: Shell script auto-indenter
-    hadolint # Verified: Dockerfile security audit engine
-  ];
-
-  # display manager
   services.greetd = {
     enable = true;
     settings = {
+      # Auto-login into Sway on first boot; tuigreet available for session switching
       initial_session = {
         command = "${pkgs.sway}/bin/sway";
         user = "vyrx";
@@ -326,96 +176,230 @@
     TTYVTDisallocate = true;
   };
 
-  # stop hard shutdown pressing power button
-  services.logind.settings.Login.HandlePowerKey = "ignore";
+  # ╭───────────────────────────────────────────────────────────────────────╮
+  # │ USER ACCOUNT                                                          │
+  # ╰───────────────────────────────────────────────────────────────────────╯
 
-  # Enable KDE Connect and open required firewall ports
-  programs.kdeconnect.enable = true;
+  users.users."vyrx" = {
+    isNormalUser = true;
+    description = "vyrx";
+    extraGroups = ["networkmanager" "wheel" "i2c"];
+  };
 
-  # ================================================================================================
-  # NIX PACKAGE MANAGER CORE CONFIGURATION
-  # ================================================================================================
+  users.defaultUserShell = pkgs.fish;
+
+  # ╭───────────────────────────────────────────────────────────────────────╮
+  # │ FONTS                                                                 │
+  # ╰───────────────────────────────────────────────────────────────────────╯
+
+  fonts.packages = with pkgs; [
+    nerd-fonts.jetbrains-mono
+  ];
+
+  # ╭───────────────────────────────────────────────────────────────────────╮
+  # │ CORE PROGRAMS                                                         │
+  # ╰───────────────────────────────────────────────────────────────────────╯
+
+  programs.fish.enable = true;
+
+  programs.neovim = {
+    enable = true;
+    defaultEditor = true;
+  };
+  environment.variables.SUDO_EDITOR = "nvim";
+  security.sudo.extraConfig = ''
+    Defaults env_keep += "SUDO_EDITOR"
+  '';
+
+  programs.ssh = {
+    startAgent = true;
+    extraConfig = ''
+      Host *
+        AddKeysToAgent yes
+    '';
+  };
+  # Prevent gnome's gcr-ssh-agent (pulled in by xdg-desktop-portal-gnome)
+  # from conflicting with programs.ssh.startAgent
+  services.gnome.gcr-ssh-agent.enable = false;
+
+  programs.git = {
+    enable = true;
+    config = {
+      user.name = "vyrx";
+      user.email = "theamit.969@gmail.com";
+      init.defaultBranch = "main";
+      pull.rebase = true;
+    };
+  };
+
+  programs.thunar.enable = true;
+  services.tumbler.enable = true;
+  environment.pathsToLink = ["/share/thumbnailers"];
+
+  # Remap CapsLock → Ctrl (hold) / Esc (tap); Esc → CapsLock
+  services.keyd = {
+    enable = true;
+    keyboards.default = {
+      ids = ["*"];
+      settings.main = {
+        capslock = "overload(control, esc)";
+        escape = "capslock";
+      };
+    };
+  };
+
+  # ╭───────────────────────────────────────────────────────────────────────╮
+  # │ GAMING & PERFORMANCE                                                  │
+  # ╰───────────────────────────────────────────────────────────────────────╯
+
+  programs.steam = {
+    enable = true;
+    gamescopeSession.enable = true;
+    extraCompatPackages = with pkgs; [proton-ge-bin];
+  };
+
+  programs.gamemode.enable = true;
+
+  # ╭───────────────────────────────────────────────────────────────────────╮
+  # │ SPOTIFY (Spicetify)                                                   │
+  # ╰───────────────────────────────────────────────────────────────────────╯
+
+  programs.spicetify = let
+    # Fixed: use stdenv.hostPlatform.system (pkgs.system is deprecated)
+    spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+  in {
+    enable = true;
+    enabledCustomApps = with spicePkgs.apps; [marketplace];
+    enabledExtensions = with spicePkgs.extensions; [
+      adblockify # Blocks audio and visual ads
+      hidePodcasts # Strips podcast clutter from sidebar
+      shuffle # Fixes Spotify's broken native shuffle
+    ];
+  };
+
+  # ╭───────────────────────────────────────────────────────────────────────╮
+  # │ SYSTEM PACKAGES                                                       │
+  # ╰───────────────────────────────────────────────────────────────────────╯
+
+  nixpkgs.config.allowUnfree = true;
+
+  environment.systemPackages = with pkgs; [
+    # ── Wayland / Desktop ───────────────────────────────────────────────
+    swaybg
+    swaylock-effects
+    kanshi
+    xwayland-satellite
+    wl-clipboard
+    cliphist
+    grim
+    slurp
+    satty
+    libnotify
+    ddcutil
+    glib # gsettings binary for GTK4 theming
+    bibata-cursors
+    adwaita-icon-theme
+
+    # ── Terminal & Shell ─────────────────────────────────────────────────
+    ghostty
+    tmux
+    gum
+    fzf
+    eza
+    bat
+    fd
+    fastfetch
+    zoxide
+    yazi
+    jq
+
+    # ── Editors & IDE ────────────────────────────────────────────────────
+    vim
+    zed-editor
+    nixd
+    alejandra
+
+    # ── Development Tools ────────────────────────────────────────────────
+    github-cli
+    lazygit
+    cmake
+    gnumake
+    gcc
+    go
+    gopls
+    nodejs
+    deno
+    python3Packages.flake8
+    python3Packages.black
+    lua54Packages.luacheck
+    stylua
+    lua-language-server
+    revive
+    gofumpt
+    prettier
+    eslint_d
+    fixjson
+    shellcheck
+    shfmt
+    hadolint
+
+    # ── Media ────────────────────────────────────────────────────────────
+    mpv
+    yt-dlp
+    obs-studio
+    gpu-screen-recorder
+    imagemagick
+    ffmpegthumbnailer
+    hyprpicker
+
+    # ── Internet & Communication ─────────────────────────────────────────
+    brave
+    inputs.zen-browser.packages."x86_64-linux".default
+    vesktop
+    localsend
+    opencode
+
+    # ── Files & Productivity ─────────────────────────────────────────────
+    evince
+    foliate
+    zathura
+    obsidian
+    anki
+    transmission_4-gtk
+
+    # ── Gaming ───────────────────────────────────────────────────────────
+    heroic
+    wine
+    lutris
+    mangohud
+
+    # ── System Utilities ─────────────────────────────────────────────────
+    btop
+    mpc
+    playerctl
+    ripgrep
+    wget
+    vicinae
+    spotify
+    antigravity
+  ];
+
+  # ╭───────────────────────────────────────────────────────────────────────╮
+  # │ NIX PACKAGE MANAGER                                                   │
+  # ╰───────────────────────────────────────────────────────────────────────╯
 
   nix = {
     settings = {
       experimental-features = ["nix-command" "flakes"];
-      extra-substituters = ["https://noctalia.cachix.org"];
-      extra-trusted-public-keys = ["noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="];
       trusted-users = ["root" "vyrx"];
       auto-optimise-store = true;
     };
-
     gc = {
       automatic = true;
       dates = "weekly";
       options = "--delete-older-than 14d";
     };
   };
-  programs.noctalia = {
-    enable = true;
-  };
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
 
-  # ================================================================================================
-  # GAMING & PERFORMANCE ENGINE
-  # ================================================================================================
-
-  # 1. Core Steam and Proton-GE Setup
-  programs.steam = {
-    enable = true;
-    gamescopeSession.enable = true; # Adds the experimental console-mode login option
-    extraCompatPackages = with pkgs; [
-      proton-ge-bin
-    ];
-  };
-
-  # 2. Automated Performance Priority (Replicates CachyOS background tuning)
-  programs.gamemode.enable = true;
-
-  # 3. Essential Graphic Drivers & 32-bit Compatibility for Steam
-  hardware.graphics = {
-    enable = true;
-    enable32Bit = true;
-  };
-
-  services.xserver.videoDrivers = ["nvidia"];
-
-  hardware.nvidia = {
-    modesetting.enable = true;
-    open = false; # Proprietary drivers offer optimal performance for the RTX 2050
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
-
-    # Laptop Hybrid Routing: Wakes up the RTX 2050 when launching games
-    prime = {
-      amdgpuBusId = "PCI:4:0:0"; # Verified from your lspci output!
-      nvidiaBusId = "PCI:1:0:0"; # Verified from your lspci output!
-      offload = {
-        enable = true;
-        enableOffloadCmd = true;
-      };
-    };
-  };
-
-  # Enable the OpenSSH daemon.
-  # services.openssh = {
-  #   enable = true;
-  #   settings = {
-  #     PermitRootLogin = "no";
-  #     PasswordAuthentication = true; # Keep true for now so you don't accidentally lock yourself out!
-  #   };
-  # };
-
-  # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [53317];
-  networking.firewall.allowedUDPPorts = [53317];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
-
-  system.stateVersion = "26.05"; # Did you read the comment?
+  system.stateVersion = "26.05";
 }

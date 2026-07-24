@@ -1,6 +1,6 @@
 {...}: {
   services.mako = {
-    enable = false;
+    enable = true;
 
     settings = {
       sort = "-time";

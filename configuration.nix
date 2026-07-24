@@ -97,6 +97,18 @@
 
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
+  security.polkit.enable = true;
+
+  # gsr-kms-server needs cap_sys_admin to read KMS/DRM framebuffers for screen
+  # recording. security.wrappers persists the capability across rebuilds;
+  # setcap on a store path would be lost on the next switch.
+  security.wrappers.gsr-kms-server = {
+    source = "${pkgs.gpu-screen-recorder}/bin/gsr-kms-server";
+    capabilities = "cap_sys_admin+ep";
+    owner = "root";
+    group = "root";
+  };
+
   services.pipewire = {
     enable = true;
     alsa.enable = true;
@@ -312,6 +324,8 @@
     zoxide
     yazi
     jq
+    wiremix
+    wifitui
 
     # ── Editors & IDE ────────────────────────────────────────────────────
     vim
@@ -379,7 +393,7 @@
     playerctl
     ripgrep
     wget
-    vicinae
+    # vicinae
     spotify
     antigravity
   ];

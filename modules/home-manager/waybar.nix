@@ -1,8 +1,8 @@
-# Disabled: Noctalia currently owns the bar.
-# Flip `enable` to true to switch to waybar.
+# programs.waybar.systemd.enable defaults to false, so enable=true just
+# installs + writes config. Waybar is launched via niri/sway spawn-at-startup.
 {...}: {
   programs.waybar = {
-    enable = false;
+    enable = true;
 
     settings.mainBar = {
       reload_style_on_change = true;
@@ -35,14 +35,6 @@
         exec = "~/Scripts/indicator-record";
         signal = 8;
         return-type = "json";
-      };
-
-      "custom/last-updated" = {
-        exec = "~/Scripts/last-updated-days.sh";
-        return-type = "json";
-        interval = 3600;
-        format = " {text}";
-        on-click = "ghostty -e topgrade";
       };
 
       "sway/workspaces" = {
@@ -123,11 +115,11 @@
         on-click-right = "pamixer -t";
         tooltip-format = "Playing at {volume}%";
         scroll-step = 5;
-        format-muted = "";
+        format-muted = "";
         format-icons = {
-          headphone = "";
-          headset = "";
-          default = ["" "" ""];
+          headphone = "";
+          headset = "";
+          default = ["" "" ""];
         };
       };
 
@@ -135,7 +127,8 @@
         format = "{icon} {capacity}%";
         format-discharging = "{icon} {capacity}%";
         format-charging = "{icon} {capacity}%";
-        format-plugged = " {capacity}%";
+        format-plugged = " {capacity}%";
+        format-critical = "󰂃 {capacity}%";
         format-full = "󰂅";
         format-icons = {
           charging = ["󰢜" "󰂆" "󰂇" "󰂈" "󰢝" "󰂉" "󰢞" "󰂊" "󰂋" "󰂅"];

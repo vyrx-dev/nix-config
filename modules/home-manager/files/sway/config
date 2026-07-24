@@ -1,5 +1,4 @@
 # man 5 sway
-set $ipc noctalia msg
 
 seat * xcursor_theme Bibata-Modern-Ice 24
 
@@ -13,6 +12,9 @@ exec_always {
 # ╭───────────────────────────────────────────────────────────────────────╮
 # │ STARTUP                                                               │
 # ╰───────────────────────────────────────────────────────────────────────╯
+exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
+exec systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP PATH
+
 exec kanshi
 exec_always kanshictl reload
 exec waybar
@@ -21,7 +23,6 @@ exec kdeconnect-indicator
 exec wl-clip-persist --clipboard regular
 exec wl-paste --watch cliphist store
 exec ~/Scripts/battery-monitor
-# exec noctalia
 
 # ╭───────────────────────────────────────────────────────────────────────╮
 # │ VARIABLES                                                             │

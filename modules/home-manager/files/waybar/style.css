@@ -1,42 +1,64 @@
-/* colors */
-@define-color bg          #0f0f0f;
-@define-color bg-alt      #181818;
-@define-color border      #2a2a2a;
+@define-color waybar-bg #121212;
+@define-color waybar-fg #d0d0d0;
 
-@define-color fg-shine    #e3e3e3;
-@define-color fg          #d4d4d4;
-@define-color fg-dim      #949494;
+@define-color waybar-warning #7a8b6e;
+@define-color waybar-danger #6b3a3a;
 
-@define-color accent      #89b4fa;
-@define-color green       #a6e3a1;
-@define-color yellow      #f9e2af;
-@define-color red         #f38ba8;
+@define-color waybar-surface #1e1e1e;
+@define-color waybar-surface-hover #2a2a2a;
+@define-color waybar-border #3a3a3a;
+@define-color waybar-workspace-active-bg #333333;
+@define-color waybar-workspace-occupied-fg #a0a0a0;
+@define-color waybar-workspace-empty-fg #505050;
 
-/* reset */
 * {
+  background-color: transparent;
+  color: @waybar-fg;
   border: none;
   border-radius: 0;
-  font-family: "JetBrainsMono Nerd Font";
+  font-family: "Inter";
   font-size: 11px;
-  font-weight: 800;
+}
+
+tooltip {
+  background: @waybar-bg;
+  border-radius: 4px;
+  padding: 6px 10px;
+}
+
+menu {
+  background: @waybar-surface;
+  border: 1px solid @waybar-border;
+  padding: 4px;
+}
+
+menu menuitem:hover {
+  background: @waybar-surface-hover;
 }
 
 window#waybar {
-  background: alpha(@bg, 0.99);
-  color: @fg;
+  background: @waybar-bg;
 }
 
-#workspaces {
-  margin: 0;
-  padding: 0;
+.modules-center {
+  padding: 0 80px;
 }
 
 #workspaces button {
-  padding: 0 8px;
-  margin: 0;
-  min-width: 0;
+  padding: 0 2px;
+  margin: 0 1px;
+  min-width: 12px;
+  min-height: 12px;
   background-color: transparent;
-  color: @fg-dim;
+  color: @waybar-workspace-empty-fg;
+  font-weight: 400;
+  transition: all 100ms ease;
+  border-radius: 0;
+  border: none;
+}
+
+#workspaces button.focused {
+  background-color: @waybar-workspace-active-bg;
   font-weight: 500;
 }
 
@@ -49,55 +71,45 @@ window#waybar {
 
 #workspaces button.persistent,
 #workspaces button.empty {
+  color: @waybar-workspace-empty-fg;
   opacity: 0.5;
 }
 
 #workspaces button.visible {
-  color: #a0a0a0;
-  opacity: 0.6;
-}
-
-#workspaces button.focused,
-#workspaces button.active {
-  color: @fg;
-  font-weight: 700;
-  background-color: transparent;
-  box-shadow: inset 0 -2px 0 0 @fg-dim;
-  opacity: 1;
-}
-
-#mpris {
-  color: @fg;
-  padding: 0 5px;
-  transition: opacity 150ms ease;
+  color: @waybar-workspace-occupied-fg;
 }
 
 #mpris.paused {
   opacity: 0.4;
 }
 
-#mpris.spotify {
-  color: @green;
-}
-
-#custom-expand,
-#tray,
-#cpu,
 #memory,
+#cpu,
 #disk,
+#battery,
 #network,
 #pulseaudio,
-#battery,
+#backlight,
+#tray,
 #custom-screenrecording-indicator,
-#custom-last-updated,
+#custom-expand,
+#mpris,
+#clock,
+#custom-idle-indicator,
+#custom-dnd-indicator,
+#custom-last-updated {
+  padding: 0 6px;
+  font-weight: 600;
+  opacity: 1;
+  transition: opacity 150ms ease;
+}
+
 #clock {
-  color: @fg;
-  padding: 0 4px;
+  font-weight: 700;
 }
 
 #custom-expand {
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 10px;
 }
 
 #custom-screenrecording-indicator {
@@ -106,76 +118,34 @@ window#waybar {
 }
 
 #custom-screenrecording-indicator.active {
-  color: @red;
+  color: @waybar-danger;
+}
+#bluetooth,
+#battery.warning {
+  color: @waybar-warning;
 }
 
-#group-tray-drawer {
-  margin-right: -4px;
+#battery.critical {
+  color: @waybar-danger;
+  animation: blink 1s infinite;
 }
 
-#tray > widget > button.passive {
-  -gtk-icon-effect: dim;
+#custom-last-updated.critical {
+  color: @waybar-danger;
+  animation: blink 1s infinite;
 }
 
-#tray > widget > button.needs-attention {
-  color: @red;
-}
-
-#cpu.warning,
-#memory.warning,
-#disk.warning {
-  color: @yellow;
-}
-#cpu.critical,
-#memory.critical,
-#disk.critical {
-  color: @red;
-}
-
-#pulseaudio.muted {
-  color: @fg-dim;
-  opacity: 0.5;
-}
-
-#network.disconnected {
-  color: @red;
-}
-
-#battery.charging,
-#battery.plugged {
-  color: @accent;
-}
-
-#battery.warning:not(.charging) {
-  color: @yellow;
-}
-
-#battery.critical:not(.charging) {
-  color: @red;
-  animation: blink 1s linear infinite;
+#cpu,
+#memory,
+#network,
+#pulseaudio,
+#battery,
+#clock {
+  margin: 0 1px;
 }
 
 @keyframes blink {
-  0% { opacity: 1; }
-  50% { opacity: 0.4; }
-  100% { opacity: 1; }
-}
-
-#clock {
-  padding-left: 0;
-}
-
-tooltip {
-  background: alpha(@bg-alt, 0.98);
-  border: 1px solid @border;
-  border-radius: 8px;
-  padding: 8px 12px;
-  color: @fg;
-  font-size: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-tooltip label {
-  color: @fg;
-  padding: 2px;
+  50% {
+    opacity: 0.5;
+  }
 }

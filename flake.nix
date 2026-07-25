@@ -7,7 +7,7 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # noctalia.url = "github:noctalia-dev/noctalia/cachix";
+
     spicetify-nix.url = "github:Gerg-L/spicetify-nix";
     zen-browser.url = "github:youwen5/zen-browser-flake";
   };
@@ -16,7 +16,6 @@
     self,
     nixpkgs,
     home-manager,
-    # noctalia,
     spicetify-nix,
     zen-browser,
     ...
@@ -25,7 +24,6 @@
       system = "x86_64-linux";
       specialArgs = {inherit inputs;};
       modules = [
-        # noctalia.nixosModules.default
         spicetify-nix.nixosModules.default
 
         home-manager.nixosModules.home-manager

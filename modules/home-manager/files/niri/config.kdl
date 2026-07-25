@@ -29,7 +29,7 @@ environment {
     XDG_SESSION_TYPE "wayland"
     XDG_CURRENT_DESKTOP "niri"
     QT_QPA_PLATFORMTHEME "qt6ct"
-    TERMINAL "kitty"
+    TERMINAL "ghsotty"
     XCURSOR_THEME "Bibata-Modern-Ice"
     XCURSOR_SIZE "24"
 }
@@ -90,6 +90,8 @@ spawn-at-startup "mako"
 spawn-sh-at-startup "wl-clip-persist --clipboard regular"
 spawn-sh-at-startup "wl-paste --watch cliphist store"
 spawn-at-startup "kdeconnect-indicator"
+spawn-at-startup "blueman-applet"
+spawn-sh-at-startup "~/Scripts/set-wallpaper random"
 spawn-sh-at-startup "$HOME/Scripts/battery-monitor"
 
 
@@ -226,18 +228,15 @@ window-rule {
 // YouTube – no transparency
 window-rule {
     opacity 1.0
-    match app-id="chrome-youtube.com__-Default"
-    match app-id="helium"
+    match app-id="brave-youtube.com__-Default"
 }
 
 // Transparent applications
 window-rule {
     draw-border-with-background false
-    match app-id="zed"
+    match app-id="dev.zed.Zed"
     match app-id="code"
-    // match app-id="ghostty"
     match app-id="vesktop"
-    match app-id="org.qbittorrent.qBittorrent"
     match app-id="thunar"
     match app-id="org.gnome.Nautilus"
     match app-id="zathura"
@@ -249,7 +248,9 @@ window-rule {
 // Terminal windows
 window-rule {
     match app-id="com.mitchellh.ghostty"
+    match app-id="kitty"
     open-maximized false
+    opacity 1.0
     draw-border-with-background false
     default-column-width { proportion 0.5; }
 }
@@ -267,10 +268,9 @@ window-rule {
     match app-id="system-config-printer"
     match app-id="ghostty_journalctl"
     match title=r#".*Extension.*Bitwarden.*"#
-    match app-id="helium-keep"
     match app-id="pavucontrol"
-    match app-id="thunar"
-    match app-id="easyeffects"
+    match app-id="org.xfce.Thunar"
+    match app-id="com.github.wwmm.easyeffects"
     match title="Oklch Color Picker"
     open-floating true
     default-column-width { proportion 0.6; }
@@ -279,12 +279,14 @@ window-rule {
 
 // Floating terminal apps
 window-rule {
-    match app-id="ghostty" title="rmpc-music"
-    match app-id="ghostty" title="toofan-tui"
-    match app-id="ghostty" title="btop-system"
-    match app-id="ghostty" title="yazi-files"
-    match app-id="ghostty" title="webapp-list"
-    match app-id="ghostty" title="gh-notify"
+    match app-id="com.mitchellh.ghostty" title="rmpc-music"
+    match app-id="com.mitchellh.ghostty" title="toofan-tui"
+    match app-id="com.mitchellh.ghostty" title="btop-system"
+    match app-id="com.mitchellh.ghostty" title="yazi-files"
+    match app-id="com.mitchellh.ghostty" title="webapp-list"
+    match app-id="com.mitchellh.ghostty" title="gh-notify"
+    match app-id="com.mitchellh.ghostty" title="wiremix"
+    match app-id="com.mitchellh.ghostty" title="wifitui"
     open-floating true
     default-column-width { proportion 0.6; }
     default-window-height { proportion 0.7; }
@@ -292,7 +294,7 @@ window-rule {
 
 // gh-dash fullscreen
 window-rule {
-    match app-id="ghostty" title="gh-dash"
+    match app-id="com.mitchellh.ghostty" title="gh-dash"
     open-fullscreen true
 }
 
@@ -342,10 +344,11 @@ window-rule {
 binds {
     // ─── Core Applications ───
     Mod+Return                          hotkey-overlay-title="Terminal" { spawn "ghostty"; }
-    Mod+B                               hotkey-overlay-title="Helium Browser" { spawn "helium-browser"; }
-    Mod+Shift+B                         hotkey-overlay-title="Helium Browser (Private)" { spawn "helium-browser" "--incognito"; }
+    Mod+Space                           repeat=false hotkey-overlay-title="App Launcher" { spawn "fuzzel"; }
+    Mod+B                               hotkey-overlay-title="Zen Browser" { spawn "zen"; }
+    Mod+Shift+B                         hotkey-overlay-title="Brave (Private)" { spawn "brave" "--incognito"; }
     Mod+E                               hotkey-overlay-title="Thunar" { spawn "thunar"; }
-    Mod+C                               hotkey-overlay-title="VS Code" { spawn "code"; }
+    Mod+C                               hotkey-overlay-title="Zed Editor" { spawn "zed"; }
     Mod+D                               hotkey-overlay-title="Discord" { spawn "vesktop"; }
     Mod+M                               hotkey-overlay-title="Spotify" { spawn "spotify-launcher"; }
     Mod+SHIFT+G                         hotkey-overlay-title="Email" { spawn "geary"; }
@@ -357,16 +360,18 @@ binds {
     Alt+Q                               hotkey-overlay-title="Yazi" { spawn-sh "ghostty --title='yazi-files' -e yazi"; }
     Alt+M                               hotkey-overlay-title="rmpc" { spawn-sh "ghostty --title='rmpc-music' -e rmpc"; }
     Alt+T                               hotkey-overlay-title="Toofan" { spawn-sh "ghostty --title='toofan-tui' -e toofan"; }
-    Alt+G                               hotkey-overlay-title="gh-dash" { spawn-sh "ghostty --title='gh-dash' -e gh dash"; }
+    Alt+G                               hotkey-overlay-title="gh-dash" { spawn-sh "ghostty --title='gh-dash' -e gh-dash"; }
+    Alt+S                               hotkey-overlay-title="Volume Mixer" { spawn-sh "ghostty --title='wiremix' -e wiremix"; }
+    Alt+W                               hotkey-overlay-title="WiFi" { spawn-sh "ghostty --title='wifitui' -e wifitui"; }
+    Alt+B                               hotkey-overlay-title="Books" { spawn "foliate"; }
     Alt+L                               hotkey-overlay-title="Suspend & Lock" { spawn-sh "systemctl suspend && swaylock"; }
     Alt+Space                           hotkey-overlay-title="Attach Tmux" { spawn-sh "ghostty -e tmux a"; }
-    Alt+P                               hotkey-overlay-title="Book Reader" { spawn-sh "ghostty -e ~/Scripts/book-reader"; }
     // Alt+Return                       { spawn-sh "ghostty --title='gh-notify' -e sh -c 'gh notify; read'"; }
 
     // ─── Web Applications ───
     Mod+A                               hotkey-overlay-title="ChatGPT" { spawn-sh "~/Scripts/launch-webapp https://chatgpt.com"; }
     Mod+Shift+A                         hotkey-overlay-title="Gemini" { spawn-sh "~/Scripts/launch-webapp https://gemini.google.com"; }
-    Mod+Alt+A                           hotkey-overlay-title="Perplexity" { spawn-sh "~/Scripts/launch-webapp https://perplexity.ai"; }
+    Mod+Alt+A                           hotkey-overlay-title="Claude" { spawn-sh "~/Scripts/launch-webapp https://claude.ai"; }
     Mod+T                               hotkey-overlay-title="Todoist" { spawn-sh "~/Scripts/launch-webapp https://todoist.com"; }
     Alt+C                               hotkey-overlay-title="Google Calendar" { spawn-sh "~/Scripts/launch-webapp https://calendar.google.com"; }
     Mod+Y                               hotkey-overlay-title="YouTube" { spawn-sh "~/Scripts/launch-webapp https://youtube.com"; }
@@ -379,9 +384,11 @@ binds {
 
     // ─── Wallpaper ───
     Ctrl+Alt+Space                      hotkey-overlay-title="Random Wallpaper" { spawn-sh "~/Scripts/set-wallpaper random"; }
+    Mod+Ctrl+Shift+Space                hotkey-overlay-title="Choose Wallpaper" { spawn-sh "~/Scripts/set-wallpaper choose"; }
 
     // ─── Utilities ───
-    Mod+S                               hotkey-overlay-title="Volume Control" { spawn "pavucontrol"; }
+    Alt+comma                           hotkey-overlay-title="Clipboard History" { spawn-sh "cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"; }
+    Alt+period                          hotkey-overlay-title="Emoji Picker" { spawn-sh "~/Scripts/fuzzel-emoji"; }
     Mod+Backspace                       hotkey-overlay-title="Terminal Transparency" { spawn-sh "~/Scripts/toggle-terminal-transparency"; }
     Mod+Shift+Space                     hotkey-overlay-title="Toggle Waybar" { spawn-sh "~/Scripts/toggle-waybar"; }
     Mod+SHIFT+M                         hotkey-overlay-title="Online Music" { spawn-sh "~/Scripts/beats"; }
@@ -390,7 +397,7 @@ binds {
     Mod+Alt+Return                      hotkey-overlay-title="Attach Tmux" { spawn-sh "ghostty -e tmux a"; }
     Mod+Alt+N                           hotkey-overlay-title="Night Light" { spawn-sh "~/Scripts/toggle-wlsunset"; }
     Mod+Alt+Space                       hotkey-overlay-title="vyrx.dev" { spawn-sh "~/Scripts/launch-webapp https://vyrx.dev"; }
-    Print                               hotkey-overlay-title="Color Picker" { spawn-sh "niri msg pick-color | wl-copy"; }
+    Print                               hotkey-overlay-title="Color Picker" { spawn "hyprpicker" "-a"; }
     Mod+Alt+P                           hotkey-overlay-title="Android Emulator" { spawn-sh "env QT_QPA_PLATFORM=xcb ~/Android/Sdk/emulator/emulator -avd Pixel_9_Pro &"; }
 
     // ─── Notifications ───
@@ -407,13 +414,13 @@ binds {
 
     // ─── Session & Power ───
     Mod+ALT+L                           hotkey-overlay-title="Lock Screen" { spawn-sh "swaylock"; }
-    Mod+Escape                          hotkey-overlay-title="Edit Niri Config" { spawn-sh "ghostty -e nvim ~/.config/niri/config.kdl"; }
+    Mod+Escape                          hotkey-overlay-title="Power Menu" { spawn-sh "~/Scripts/powermenu"; }
     CTRL+ALT+Delete                     { quit; }
 
     // ─── Monitor Controls ───
     Ctrl+Shift+1                        hotkey-overlay-title="Toggle Laptop Monitor" { spawn-sh "$HOME/Scripts/toggle-output eDP-1"; }
     Ctrl+Shift+2                        hotkey-overlay-title="Toggle External Monitor" { spawn-sh "$HOME/Scripts/toggle-output HDMI-A-1"; }
-    Mod+Shift+Backslash                 hotkey-overlay-title="Switch Waybar Layout" { spawn-sh "~/Scripts/switch-waybar"; }
+
 
 
     // ─── Audio Controls ───
@@ -429,8 +436,8 @@ binds {
     Mod+F12                             allow-when-locked=true hotkey-overlay-title="Next Track" { spawn-sh "playerctl next"; }
 
     // ─── Brightness Controls ───
-    // XF86MonBrightnessUp              allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+10%"; }
-    // XF86MonBrightnessDown            allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
+    XF86MonBrightnessUp                  allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+10%"; }
+    XF86MonBrightnessDown               allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
     Mod+Alt+XF86AudioRaiseVolume        allow-when-locked=true hotkey-overlay-title="Brightness Up" { spawn "brightnessctl" "--class=backlight" "set" "+10%"; }
     Mod+Alt+XF86AudioLowerVolume        allow-when-locked=true hotkey-overlay-title="Brightness Down" { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
     Mod+XF86AudioRaiseVolume            allow-when-locked=true hotkey-overlay-title="External Brightness Up" { spawn-sh "ddcutil setvcp 10 + 10"; }

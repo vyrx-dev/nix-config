@@ -16,6 +16,8 @@
     ./tmux.nix
     ./kanshi.nix
     ./swaylock.nix
+    ./cursor.nix
+    ./theme.nix
     ./polkit.nix
   ];
 }

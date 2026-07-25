@@ -1,12 +1,9 @@
 # Runs MPD as a Home Manager-managed systemd --user service.
 #
-# This replaces ~/.config/mpd/mpd.conf entirely — the config below is
-# generated from these options, not hand-edited. Socket activation
-# (network.startWhenNeeded) means MPD doesn't start at login; it starts
-# lazily the moment something (rmpc, mpc, mpd-mpris) connects to it, on
-# both 127.0.0.1:6600 *and* a unix socket at $XDG_RUNTIME_DIR/mpd/socket.
-# That's the modern equivalent of the two manual `bind_to_address` lines
-# the old config had.
+# This module generates ~/.config/mpd/mpd.conf — manual edits to that file
+# will be overwritten. Socket activation (network.startWhenNeeded) means MPD
+# doesn't start at login; it starts lazily when something (rmpc, mpc,
+# mpd-mpris) connects to it, on 127.0.0.1:6600 and $XDG_RUNTIME_DIR/mpd/socket.
 {config, ...}: {
   services.mpd = {
     enable = true;

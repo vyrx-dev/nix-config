@@ -10,8 +10,8 @@
       position = "bottom";
       exclusive = true;
       passthrough = false;
-      height = 26;
-      spacing = 4;
+      height = 28;
+      spacing = 0;
 
       modules-left = [
         "sway/workspaces"
@@ -33,6 +33,7 @@
       "custom/screenrecording-indicator" = {
         on-click = "~/Scripts/screenrecord";
         exec = "~/Scripts/indicator-record";
+        interval = 2;
         signal = 8;
         return-type = "json";
       };
@@ -77,14 +78,14 @@
 
       cpu = {
         interval = 2;
-        format = "󰍛 {usage}%";
-        tooltip = false;
+        format = "cpu {usage}%";
+        tooltip = true;
         on-click = "ghostty -e btop";
       };
 
       memory = {
-        interval = 5;
-        format = "󰘚 {used:0.1f}gb";
+        interval = 2;
+        format = "mem {used:0.1f}gb";
         tooltip-format = "{used:0.1f}G / {total:0.1f}G";
         on-click = "ghostty -e btop";
       };
@@ -92,48 +93,36 @@
       disk = {
         interval = 30;
         path = "/";
-        format = "󰋊 {percentage_used}%";
+        format = "disk {percentage_used}%";
         tooltip-format = "{used} / {total} ({percentage_free}% free)";
         on-click = "ghostty -e btop";
       };
 
       network = {
-        format-wifi = "{icon} {essid}";
-        format-ethernet = "󰀂 {ifname}";
-        format-disconnected = "󰤭";
-        format-icons = ["󰤯" "󰤟" "󰤢" "󰤥" "󰤨"];
+        format-wifi = "wifi {essid}";
+        format-ethernet = "eth {ifname}";
+        format-disconnected = "wifi --";
         tooltip-format-wifi = "{essid} ({frequency} GHz)\n⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}";
         tooltip-format-ethernet = "⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}";
         tooltip-format-disconnected = "Disconnected";
         interval = 3;
-        on-click = "nmgui";
+        on-click = "ghostty -e wifitui";
       };
 
       pulseaudio = {
-        format = "{icon} {volume}%";
-        on-click = "pavucontrol";
+        format = "vol {volume}%";
+        on-click = "ghostty -e wiremix";
         on-click-right = "pamixer -t";
-        tooltip-format = "Playing at {volume}%";
+        tooltip-format = "vol {volume}%";
         scroll-step = 5;
-        format-muted = "";
-        format-icons = {
-          headphone = "";
-          headset = "";
-          default = ["" "" ""];
-        };
+        format-muted = "vol muted";
       };
 
       battery = {
-        format = "{icon} {capacity}%";
-        format-discharging = "{icon} {capacity}%";
-        format-charging = "{icon} {capacity}%";
-        format-plugged = " {capacity}%";
-        format-critical = "󰂃 {capacity}%";
-        format-full = "󰂅";
-        format-icons = {
-          charging = ["󰢜" "󰂆" "󰂇" "󰂈" "󰢝" "󰂉" "󰢞" "󰂊" "󰂋" "󰂅"];
-          default = ["󰁺" "󰁻" "󰁼" "󰁽" "󰁾" "󰁿" "󰂀" "󰂁" "󰂂" "󰁹"];
-        };
+        format = "bat {capacity}%";
+        format-discharging = "bat {capacity}%";
+        format-charging = "bat {capacity}%";
+        format-plugged = "bat {capacity}%";
         tooltip-format-discharging = "{power:>1.0f}W↓ {capacity}%";
         tooltip-format-charging = "{power:>1.0f}W↑ {capacity}%";
         interval = 5;

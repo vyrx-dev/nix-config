@@ -3,7 +3,7 @@
 seat * xcursor_theme Bibata-Modern-Ice 24
 
 exec_always {
-    gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'
+    gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3-dark'
     gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
     gsettings set org.gnome.desktop.interface cursor-theme 'Bibata-Modern-Ice'
     gsettings set org.gnome.desktop.interface cursor-size 24
@@ -20,6 +20,7 @@ exec_always kanshictl reload
 exec waybar
 exec mako
 exec kdeconnect-indicator
+exec blueman-applet
 exec wl-clip-persist --clipboard regular
 exec wl-paste --watch cliphist store
 exec ~/Scripts/battery-monitor
@@ -115,11 +116,13 @@ for_window [app_id="mpv"] focus
 
 # ─── Floating Windows ───
 for_window [app_id="mpv"] floating enable, resize set width 960 height 540, move position center
-for_window [app_id="thunar"] floating enable, resize set width 1000 height 600, move position center
+for_window [app_id="org.xfce.Thunar"] floating enable, resize set width 1000 height 600, move position center
 for_window [class="feh"] floating enable, resize set width 960 height 540, move position center
 for_window [app_id="com.github.wwmm.easyeffects"] floating enable, resize set 1000 600, move position center
 for_window [app_id="com.vyrx.kanshi-switch"] floating enable, resize set width 400 height 220, move position center
 for_window [app_id="com.gabm.satty"] floating enable, resize set width 700 height 650, move position center
+for_window [title="wiremix"] floating enable, resize set width 800 height 500, move position center
+for_window [title="wifitui"] floating enable, resize set width 800 height 500, move position center
 
 # ╭───────────────────────────────────────────────────────────────────────╮
 # │ KEYBINDINGS                                                           │
@@ -128,8 +131,9 @@ for_window [app_id="com.gabm.satty"] floating enable, resize set width 700 heigh
 bindsym $mod+Return exec $term
 bindsym $mod+Space exec $menu
 bindsym $mod+b exec zen
+bindsym $mod+Shift+b exec brave --incognito
 bindsym $mod+e exec thunar
-bindsym $mod+c exec code
+bindsym $mod+c exec zed
 bindsym $mod+o exec obsidian
 bindsym $mod+Shift+G exec geary
 bindsym $mod+d exec vesktop
@@ -143,7 +147,10 @@ bindsym Alt+M exec ghostty -e rmpc
 bindsym Alt+Q exec ghostty -e yazi
 bindsym Alt+Escape exec ghostty -e tmux a
 bindsym $mod+Shift+T exec ghostty -e toofan
-bindsym Alt+G exec ghostty --title='gh-dash' -e gh dash
+bindsym Alt+G exec ghostty --title='gh-dash' -e gh-dash
+bindsym Alt+S exec ghostty --title='wiremix' -e wiremix
+bindsym Alt+W exec ghostty --title='wifitui' -e wifitui
+bindsym Alt+B exec foliate
 bindsym Alt+I exec ghostty --class=com.vyrx.kanshi-switch -e ~/Scripts/kanshi-switch
 
 # ─── Web Applications ───
@@ -180,7 +187,7 @@ bindsym Alt+P exec hyprpicker -a
 
 # ─── Bar ───
 bindsym $mod+Shift+Space exec ~/Scripts/toggle-waybar
-bindsym $mod+Shift+backslash exec ~/Scripts/switch-waybar
+
 
 # ─── Mobile ───
 bindsym $mod+Alt+p exec ~/Android/Sdk/emulator/emulator -avd Pixel_9_Pro &

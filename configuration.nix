@@ -54,7 +54,7 @@
   hardware.bluetooth.enable = true;
   hardware.i2c.enable = true; # Required for ddcutil (monitor brightness control)
 
-  # Battery charge limit — prevents degradation by capping at 60%
+  # Cap battery charge at 60% to reduce wear
   services.udev.extraRules = ''
     ACTION=="add|change", KERNEL=="BAT0", SUBSYSTEM=="power_supply", ATTR{charge_control_end_threshold}="60"
   '';
@@ -67,20 +67,18 @@
   # │ GRAPHICS (NVIDIA PRIME OFFLOAD)                                       │
   # ╰───────────────────────────────────────────────────────────────────────╯
 
-  # Essential for Steam 32-bit compatibility and Wayland native rendering
   hardware.graphics = {
     enable = true;
-    enable32Bit = true;
+    enable32Bit = true; # Steam 32-bit + Wayland
   };
 
   services.xserver.videoDrivers = ["nvidia"];
 
   hardware.nvidia = {
     modesetting.enable = true;
-    open = false; # Proprietary drivers offer optimal performance for the RTX 2050
+    open = false;
     package = config.boot.kernelPackages.nvidiaPackages.stable;
 
-    # Hybrid GPU routing: AMD iGPU for desktop, RTX 2050 offloaded for games
     prime = {
       amdgpuBusId = "PCI:4:0:0";
       nvidiaBusId = "PCI:1:0:0";
@@ -144,13 +142,9 @@
     ];
   };
 
-  # Force Chromium/Electron/Brave to use native Wayland instead of XWayland
   environment.sessionVariables = {
-    NIXOS_OZONE_WL = "1";
-    WLR_NO_HARDWARE_CURSORS = "1"; # Stops Nvidia GPU from lagging the cursor
-
-    # Force GTK apps to use dark theme and Bibata cursor system-wide
-    GTK_THEME = "Adwaita-dark";
+    NIXOS_OZONE_WL = "1"; # Electron/Chromium native Wayland
+    WLR_NO_HARDWARE_CURSORS = "1"; # Fixes Nvidia cursor lag
     XCURSOR_THEME = "Bibata-Modern-Ice";
     XCURSOR_SIZE = "24";
   };
@@ -165,28 +159,30 @@
   services.greetd = {
     enable = true;
     settings = {
-      # Auto-login into Sway on first boot; tuigreet available for session switching
-      # initial_session = {
-      #   command = "${pkgs.sway}/bin/sway";
-      #   user = "vyrx";
-      # };
+      initial_session = {
+        command = "${pkgs.sway}/bin/sway";
+        user = "vyrx";
+      };
       default_session = {
         command = let
           sessions = "${config.services.displayManager.sessionData.desktops}/share/wayland-sessions";
-        in "${pkgs.tuigreet}/bin/tuigreet --time --asterisks --remember --remember-user --sessions ${sessions}";
+        in "${pkgs.tuigreet}/bin/tuigreet --time --asterisks --remember --remember-user-session --sessions ${sessions}";
         user = "greeter";
       };
     };
   };
-  systemd.services.greetd.serviceConfig = {
-    Type = "idle";
-    StandardInput = "tty";
-    StandardOutput = "tty";
-    StandardError = "journal";
-    TTYReset = true;
-    TTYVHangup = true;
-    TTYVTDisallocate = true;
+
+  # Writable home for tuigreet to persist --remember / --remember-user state
+  users.users.greeter = {
+    home = "/var/lib/tuigreet";
+    createHome = true;
+    extraGroups = ["video"];
   };
+
+  # tuigreet actually stores --remember state here, not in $HOME
+  systemd.tmpfiles.rules = [
+    "d /var/cache/tuigreet 0755 greeter greeter -"
+  ];
 
   # ╭───────────────────────────────────────────────────────────────────────╮
   # │ USER ACCOUNT                                                          │
@@ -195,7 +191,7 @@
   users.users."vyrx" = {
     isNormalUser = true;
     description = "vyrx";
-    extraGroups = ["networkmanager" "wheel" "i2c"];
+    extraGroups = ["networkmanager" "wheel" "i2c" "seat" "video" "render"];
   };
 
   users.defaultUserShell = pkgs.fish;
@@ -270,22 +266,29 @@
     extraCompatPackages = with pkgs; [proton-ge-bin];
   };
 
+  programs.gamescope = {
+    enable = true;
+    capSysNice = true;
+  };
+
   programs.gamemode.enable = true;
+
+  # No seatd on this system; tell libseat to use logind directly
+  environment.variables.LIBSEAT_BACKEND = "logind";
 
   # ╭───────────────────────────────────────────────────────────────────────╮
   # │ SPOTIFY (Spicetify)                                                   │
   # ╰───────────────────────────────────────────────────────────────────────╯
 
   programs.spicetify = let
-    # Fixed: use stdenv.hostPlatform.system (pkgs.system is deprecated)
     spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.stdenv.hostPlatform.system};
   in {
     enable = true;
     enabledCustomApps = with spicePkgs.apps; [marketplace];
     enabledExtensions = with spicePkgs.extensions; [
-      adblockify # Blocks audio and visual ads
-      hidePodcasts # Strips podcast clutter from sidebar
-      shuffle # Fixes Spotify's broken native shuffle
+      adblockify
+      hidePodcasts
+      shuffle
     ];
   };
 
@@ -308,7 +311,7 @@
     satty
     libnotify
     ddcutil
-    glib # gsettings binary for GTK4 theming
+    glib # gsettings CLI for sway dconf theming
     bibata-cursors
     adwaita-icon-theme
 
@@ -318,6 +321,7 @@
     gum
     fzf
     eza
+    feh
     bat
     fd
     fastfetch
@@ -335,6 +339,7 @@
 
     # ── Development Tools ────────────────────────────────────────────────
     github-cli
+    gh-dash
     lazygit
     cmake
     gnumake
@@ -370,11 +375,13 @@
     brave
     inputs.zen-browser.packages."x86_64-linux".default
     vesktop
+    geary
     localsend
     opencode
 
     # ── Files & Productivity ─────────────────────────────────────────────
     evince
+    nautilus
     foliate
     zathura
     obsidian
@@ -393,9 +400,11 @@
     playerctl
     ripgrep
     wget
-    spotify
     antigravity
     wlsunset
+    scrcpy
+    pavucontrol
+    easyeffects
   ];
 
   # ╭───────────────────────────────────────────────────────────────────────╮

@@ -40,7 +40,7 @@ set $menu fuzzel
 # │ OUTPUT                                                                │
 # ╰───────────────────────────────────────────────────────────────────────╯
 # Run: swaymsg -t get_outputs
-output * bg /home/vyrx/Pictures/Wallpapers/nix/nixos.png fill
+output * bg /home/vyrx/Pictures/Wallpapers/monochrome/rm-rf.jpg fill
 
 # ╭───────────────────────────────────────────────────────────────────────╮
 # │ INPUT & IDLE                                                          │
@@ -123,6 +123,9 @@ for_window [app_id="com.vyrx.kanshi-switch"] floating enable, resize set width 4
 for_window [app_id="com.gabm.satty"] floating enable, resize set width 700 height 650, move position center
 for_window [title="wiremix"] floating enable, resize set width 800 height 500, move position center
 for_window [title="wifitui"] floating enable, resize set width 800 height 500, move position center
+for_window [title="btop"] floating enable, resize set width 900 height 700, move position center
+for_window [title="rmpc"] floating enable, resize set width 900 height 600, move position center
+for_window [title="yazi"] floating enable, resize set width 1100 height 700, move position center
 
 # ╭───────────────────────────────────────────────────────────────────────╮
 # │ KEYBINDINGS                                                           │
@@ -138,19 +141,21 @@ bindsym $mod+o exec obsidian
 bindsym $mod+Shift+G exec geary
 bindsym $mod+d exec vesktop
 bindsym $mod+m exec spotify
+bindsym Alt+b exec foliate
+
+
+# ─── kill app ───
 bindsym $mod+q kill
 
 # ─── Terminal Applications ───
-bindsym Alt+slash exec ghostty -e btop
-bindsym Alt+N exec ghostty -e nvim
-bindsym Alt+M exec ghostty -e rmpc
-bindsym Alt+Q exec ghostty -e yazi
-bindsym Alt+Escape exec ghostty -e tmux a
-bindsym $mod+Shift+T exec ghostty -e toofan
-bindsym Alt+G exec ghostty --title='gh-dash' -e gh-dash
-bindsym Alt+S exec ghostty --title='wiremix' -e wiremix
-bindsym Alt+W exec ghostty --title='wifitui' -e wifitui
-bindsym Alt+B exec foliate
+bindsym Alt+slash exec kitty --title='btop' -e btop
+bindsym Alt+M exec kitty  --title='rmpc' -e rmpc
+bindsym Alt+Q exec kitty  --title='yazi' -e yazi
+bindsym Alt+G exec kitty --title='gh-dash' -e gh-dash
+bindsym $mod+S exec kitty --title='wiremix' -e wiremix
+bindsym $mod+I exec kitty --title='wifitui' -e wifitui
+bindsym Alt+N exec kitty -e nvim
+bindsym Alt+Escape exec kitty -e tmux a
 bindsym Alt+I exec ghostty --class=com.vyrx.kanshi-switch -e ~/Scripts/kanshi-switch
 
 # ─── Web Applications ───

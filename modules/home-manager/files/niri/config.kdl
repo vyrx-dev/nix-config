@@ -204,6 +204,16 @@ layer-rule {
     geometry-corner-radius 10
 }
 
+// Fuzzel blur & transparency
+layer-rule {
+    match namespace="^launcher$"
+    opacity 0.85
+    background-effect {
+        blur true
+        xray false
+    }
+}
+
 
 // ╭───────────────────────────────────────────────────────────────────────╮
 // │ WINDOW RULES                                                          │

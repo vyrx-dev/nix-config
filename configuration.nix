@@ -372,6 +372,7 @@
     zed-editor
     nixd
     alejandra
+    grok-build
 
     # ── Development Tools ────────────────────────────────────────────────
     github-cli
@@ -438,7 +439,7 @@
     playerctl
     ripgrep
     wget
-    antigravity
+    antigravity-ide
     wlsunset
     scrcpy
     pavucontrol

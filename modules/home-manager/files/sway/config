@@ -134,7 +134,7 @@ for_window [title="yazi"] floating enable, resize set width 1100 height 700, mov
 # ─── Core Applications ───
 bindsym $mod+Return exec $term
 bindsym $mod+Space exec $menu
-bindsym $mod+b exec zen
+bindsym $mod+b exec brave
 bindsym $mod+Shift+b exec brave --incognito
 bindsym $mod+e exec thunar
 bindsym $mod+c exec zed
@@ -149,15 +149,15 @@ bindsym Alt+b exec foliate
 bindsym $mod+q kill
 
 # ─── Terminal Applications ───
-bindsym Alt+slash exec kitty --title='btop' -e btop
-bindsym Alt+M exec kitty  --title='rmpc' -e rmpc
-bindsym Alt+Q exec kitty  --title='yazi' -e yazi
-bindsym Alt+G exec kitty --title='gh-dash' -e gh-dash
-bindsym $mod+S exec kitty --title='wiremix' -e wiremix
-bindsym $mod+I exec kitty --title='wifitui' -e wifitui
+bindsym Alt+slash exec ghostty --title='btop' -e btop
+bindsym Alt+M exec ghostty  --title='rmpc' -e rmpc
+bindsym Alt+Q exec ghostty  --title='yazi' -e yazi
+bindsym Alt+G exec ghostty --title='gh-dash' -e gh-dash
+bindsym Alt+S exec ghostty --title='wiremix' -e wiremix
+bindsym Alt+I exec ghostty --title='wifitui' -e wifitui
 bindsym Alt+N exec kitty -e nvim
 bindsym Alt+Escape exec kitty -e tmux a
-bindsym Alt+I exec ghostty --class=com.vyrx.kanshi-switch -e ~/Scripts/kanshi-switch
+# bindsym Alt+I exec ghostty --class=com.vyrx.kanshi-switch -e ~/Scripts/kanshi-switch
 
 # ─── Web Applications ───
 bindsym $mod+a exec ~/Scripts/launch-webapp https://chatgpt.com
@@ -180,6 +180,7 @@ bindsym $mod+Alt+Space exec ~/Scripts/game-menu
 # ─── Notifications ───
 bindsym $mod+Shift+n exec makoctl dismiss -a
 bindsym $mod+n exec makoctl restore
+bindsym $mod+Ctrl+n exec makoctl mode -t do-not-disturb
 
 # ─── Screen Recording ───
 bindsym $mod+R exec ~/Scripts/screenrecord --with-desktop-audio

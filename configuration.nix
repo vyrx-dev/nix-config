@@ -128,6 +128,11 @@
   xdg.portal = {
     enable = true;
     wlr.enable = true; # Required for Sway screensharing and screenshots
+    wlr.settings.screencast = {
+      chooser_type = "simple";
+      # slurp is not on the wlr portal's systemd PATH, so default chooser fails
+      chooser_cmd = "${pkgs.slurp}/bin/slurp -f '%o' -or";
+    };
 
     config = {
       # Prevents 30-second app init freeze when no default portal is set
@@ -368,6 +373,7 @@
     obs-studio
     gpu-screen-recorder
     imagemagick
+    ffmpeg.bin
     ffmpegthumbnailer
     hyprpicker
 

@@ -182,7 +182,7 @@ bindsym $mod+n exec makoctl restore
 
 # ─── Screen Recording ───
 bindsym $mod+R exec ~/Scripts/screenrecord --with-desktop-audio
-bindsym $mod+Alt+R exec ~/Scripts/screenrecord --region
+bindsym $mod+Alt+R exec ~/Scripts/screenrecord --with-desktop-audio --region
 bindsym $mod+Shift+R exec ~/Scripts/screenrecord --with-microphone-audio
 
 # ─── Screenshot & Color Picker ───

@@ -8,9 +8,9 @@
 {lib, ...}: {
   programs.niri.enable = true;
 
-  # Sway already gets an explicit xdg-desktop-portal default elsewhere in
-  # this config, to avoid a ~30s portal-selection timeout on the first
-  # screenshot/screen-share. Niri needs the identical override or it will
-  # hit that same freeze the first time an app asks for a portal.
-  xdg.portal.config.niri.default = lib.mkForce ["wlr" "gtk"];
+  # Niri must route through the GNOME portal: it implements
+  # org.gnome.Mutter.ScreenCast (required for gsr/OBS/Discord), while the wlr
+  # portal has no niri backend. mkForce avoids the ~30s portal-selection freeze.
+  xdg.portal.config.niri.default = lib.mkForce ["gnome"];
+  xdg.portal.config.niri."org.freedesktop.impl.portal.ScreenCast" = ["gnome"];
 }

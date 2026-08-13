@@ -147,6 +147,36 @@
     ];
   };
 
+  # Nautilus only inline-extracts archives on double-click when it is the
+  # default handler for the mimetype (see nautilus-mime-actions.c)
+  xdg.mime.defaultApplications = {
+    "application/x-7z-compressed" = "org.gnome.Nautilus.desktop";
+    "application/x-7z-compressed-tar" = "org.gnome.Nautilus.desktop";
+    "application/x-bzip" = "org.gnome.Nautilus.desktop";
+    "application/x-bzip-compressed-tar" = "org.gnome.Nautilus.desktop";
+    "application/x-compress" = "org.gnome.Nautilus.desktop";
+    "application/x-compressed-tar" = "org.gnome.Nautilus.desktop";
+    "application/x-cpio" = "org.gnome.Nautilus.desktop";
+    "application/x-gzip" = "org.gnome.Nautilus.desktop";
+    "application/x-lha" = "org.gnome.Nautilus.desktop";
+    "application/x-lzip" = "org.gnome.Nautilus.desktop";
+    "application/x-lzip-compressed-tar" = "org.gnome.Nautilus.desktop";
+    "application/x-lzma" = "org.gnome.Nautilus.desktop";
+    "application/x-lzma-compressed-tar" = "org.gnome.Nautilus.desktop";
+    "application/x-tar" = "org.gnome.Nautilus.desktop";
+    "application/x-tarz" = "org.gnome.Nautilus.desktop";
+    "application/x-xar" = "org.gnome.Nautilus.desktop";
+    "application/x-xz" = "org.gnome.Nautilus.desktop";
+    "application/x-xz-compressed-tar" = "org.gnome.Nautilus.desktop";
+    "application/zip" = "org.gnome.Nautilus.desktop";
+    "application/gzip" = "org.gnome.Nautilus.desktop";
+    "application/bzip2" = "org.gnome.Nautilus.desktop";
+    "application/x-bzip2-compressed-tar" = "org.gnome.Nautilus.desktop";
+    "application/vnd.rar" = "org.gnome.Nautilus.desktop";
+    "application/zstd" = "org.gnome.Nautilus.desktop";
+    "application/x-zstd-compressed-tar" = "org.gnome.Nautilus.desktop";
+  };
+
   environment.sessionVariables = {
     NIXOS_OZONE_WL = "1"; # Electron/Chromium native Wayland
     WLR_NO_HARDWARE_CURSORS = "1"; # Fixes Nvidia cursor lag
@@ -246,6 +276,7 @@
   };
 
   programs.thunar.enable = true;
+  programs.thunar.plugins = [pkgs.xfce.thunar-archive-plugin];
   services.tumbler.enable = true;
   environment.pathsToLink = ["/share/thumbnailers"];
 
@@ -388,6 +419,7 @@
     # ── Files & Productivity ─────────────────────────────────────────────
     evince
     nautilus
+    file-roller
     foliate
     zathura
     obsidian

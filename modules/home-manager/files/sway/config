@@ -24,6 +24,7 @@ exec blueman-applet
 exec wl-clip-persist --clipboard regular
 exec wl-paste --watch cliphist store
 exec ~/Scripts/battery-monitor
+exec ~/Scripts/set-wallpaper random
 
 # ╭───────────────────────────────────────────────────────────────────────╮
 # │ VARIABLES                                                             │
@@ -40,7 +41,7 @@ set $menu fuzzel
 # │ OUTPUT                                                                │
 # ╰───────────────────────────────────────────────────────────────────────╯
 # Run: swaymsg -t get_outputs
-output * bg /home/vyrx/Pictures/Wallpapers/monochrome/rm-rf.jpg fill
+# output * bg /home/vyrx/Pictures/Wallpapers/monochrome/rm-rf.jpg fill
 
 # ╭───────────────────────────────────────────────────────────────────────╮
 # │ INPUT & IDLE                                                          │

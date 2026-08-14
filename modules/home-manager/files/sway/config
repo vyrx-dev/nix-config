@@ -157,7 +157,7 @@ bindsym Alt+S exec ghostty --title='wiremix' -e wiremix
 bindsym Alt+W exec ghostty --title='wifitui' -e wifitui
 bindsym Alt+N exec kitty -e nvim
 bindsym Alt+Escape exec kitty -e tmux a
-# bindsym Alt+I exec ghostty --class=com.vyrx.kanshi-switch -e ~/Scripts/kanshi-switch
+bindsym Alt+I exec ~/Scripts/switch-waybar-nix
 
 # ─── Web Applications ───
 bindsym $mod+a exec ~/Scripts/launch-webapp https://chatgpt.com

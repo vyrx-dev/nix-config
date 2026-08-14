@@ -371,6 +371,7 @@ binds {
     Alt+N                               hotkey-overlay-title="Neovim" { spawn-sh "ghostty -e nvim"; }
     Alt+Q                               hotkey-overlay-title="Yazi" { spawn-sh "ghostty --title='yazi-files' -e yazi"; }
     Alt+M                               hotkey-overlay-title="rmpc" { spawn-sh "ghostty --title='rmpc-music' -e rmpc"; }
+    Alt+I                               hotkey-overlay-title="Switch Waybar" { spawn-sh "~/Scripts/switch-waybar-nix"; }
     Alt+T                               hotkey-overlay-title="Toofan" { spawn-sh "ghostty --title='toofan-tui' -e toofan"; }
     Alt+G                               hotkey-overlay-title="gh-dash" { spawn-sh "ghostty --title='gh-dash' -e gh-dash"; }
     Alt+S                               hotkey-overlay-title="Volume Mixer" { spawn-sh "ghostty --title='wiremix' -e wiremix"; }

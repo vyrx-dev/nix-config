@@ -19,29 +19,17 @@
       ];
       modules-center = ["mpris"];
       modules-right = [
+        "group/tray-drawer"
         "custom/screenrecording-indicator"
         "custom/last-updated"
-        "custom/separator"
         "cpu"
-        "custom/separator"
         "memory"
-        "custom/separator"
         "disk"
-        "custom/separator"
         "network"
-        "custom/separator"
         "pulseaudio"
-        "custom/separator"
         "battery"
-        "custom/separator"
         "clock"
       ];
-
-      "custom/separator" = {
-        format = "::";
-        interval = "once";
-        tooltip = false;
-      };
 
       "custom/screenrecording-indicator" = {
         on-click = "~/Scripts/screenrecord";
@@ -80,6 +68,22 @@
         on-click-right = "playerctl next";
       };
 
+      "group/tray-drawer" = {
+        orientation = "horizontal";
+        drawer = {transition-duration = 200;};
+        modules = ["custom/expand" "tray"];
+      };
+
+      "custom/expand" = {
+        format = "❮";
+        tooltip = false;
+      };
+
+      tray = {
+        icon-size = 12;
+        spacing = 4;
+      };
+
       cpu = {
         interval = 2;
         format = "cpu {usage}%";
@@ -89,7 +93,7 @@
 
       memory = {
         interval = 2;
-        format = "mem {used:0.1f}G";
+        format = "mem {used:0.1f}gb";
         tooltip-format = "{used:0.1f}G / {total:0.1f}G";
         on-click = "ghostty -e btop";
       };
@@ -115,11 +119,11 @@
 
       pulseaudio = {
         format = "vol {volume}%";
-        format-muted = "vol muted";
         on-click = "ghostty -e wiremix";
         on-click-right = "pamixer -t";
         tooltip-format = "vol {volume}%";
         scroll-step = 5;
+        format-muted = "vol muted";
       };
 
       battery = {

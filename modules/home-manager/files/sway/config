@@ -154,7 +154,7 @@ bindsym Alt+M exec ghostty  --title='rmpc' -e rmpc
 bindsym Alt+Q exec ghostty  --title='yazi' -e yazi
 bindsym Alt+G exec ghostty --title='gh-dash' -e gh-dash
 bindsym Alt+S exec ghostty --title='wiremix' -e wiremix
-bindsym Alt+I exec ghostty --title='wifitui' -e wifitui
+bindsym Alt+W exec ghostty --title='wifitui' -e wifitui
 bindsym Alt+N exec kitty -e nvim
 bindsym Alt+Escape exec kitty -e tmux a
 # bindsym Alt+I exec ghostty --class=com.vyrx.kanshi-switch -e ~/Scripts/kanshi-switch

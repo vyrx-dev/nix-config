@@ -21,6 +21,7 @@
       modules-right = [
         "group/tray-drawer"
         "custom/screenrecording-indicator"
+        "custom/last-updated"
         "cpu"
         "memory"
         "disk"
@@ -36,6 +37,13 @@
         interval = 2;
         signal = 8;
         return-type = "json";
+      };
+
+      "custom/last-updated" = {
+        exec = "~/Scripts/last-updated-nix";
+        interval = 3600;
+        return-type = "json";
+        format = "last {text}";
       };
 
       "sway/workspaces" = {

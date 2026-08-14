@@ -14,7 +14,7 @@
         vertical-pad = 8;
         inner-pad = 6;
         layer = "overlay";
-        exit-on-keyboard-focus-loss = "yes";
+        exit-on-keyboard-focus-loss = "no";
       };
 
       colors = {

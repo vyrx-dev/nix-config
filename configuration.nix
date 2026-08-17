@@ -281,7 +281,7 @@
   };
 
   programs.thunar.enable = true;
-  programs.thunar.plugins = [pkgs.xfce.thunar-archive-plugin];
+  programs.thunar.plugins = [pkgs.thunar-archive-plugin];
   services.tumbler.enable = true;
   environment.pathsToLink = ["/share/thumbnailers"];
 
@@ -390,6 +390,7 @@
     gopls
     nodejs
     deno
+    python3
     python3Packages.flake8
     python3Packages.black
     lua54Packages.luacheck
@@ -420,6 +421,7 @@
     vesktop
     geary
     localsend
+    telegram-desktop
     opencode
 
     # ── Files & Productivity ─────────────────────────────────────────────

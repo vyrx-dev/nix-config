@@ -364,6 +364,7 @@
     eza
     feh
     bat
+    tree
     fd
     fastfetch
     zoxide
@@ -403,6 +404,7 @@
     fixjson
     shellcheck
     shfmt
+    hadolint
     hadolint
 
     # ── Media ────────────────────────────────────────────────────────────

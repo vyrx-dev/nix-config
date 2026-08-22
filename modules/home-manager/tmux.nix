@@ -36,11 +36,11 @@
       bind -r S-Right resize-pane -R 5
       bind -r m resize-pane -Z
 
-      # Navigation
-      bind-key -n C-h select-pane -L
-      bind-key -n C-j select-pane -D
-      bind-key -n C-k select-pane -U
-      bind-key -n C-l select-pane -R
+      # Navigation (disabled - handled by vim-tmux-navigator plugin)
+      # bind-key -n C-h select-pane -L
+      # bind-key -n C-j select-pane -D
+      # bind-key -n C-k select-pane -U
+      # bind-key -n C-l select-pane -R
 
       # Splits
       unbind '"'

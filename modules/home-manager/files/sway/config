@@ -202,7 +202,7 @@ bindsym $mod+Shift+BackSpace exec ~/Scripts/run-scrcpy mirror
 bindsym $mod+Ctrl+BackSpace exec ~/Scripts/run-scrcpy webcam
 
 # ─── Others ───
-bindsym $mod+BackSpace exec ~/Scripts/toggle-wlsunset
+bindsym $mod+Alt+n exec ~/Scripts/toggle-wlsunset
 
 # ─── Wallpaper ───
 bindsym Ctrl+Alt+Space exec ~/Scripts/set-wallpaper random

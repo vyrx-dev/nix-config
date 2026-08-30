@@ -86,14 +86,15 @@ spawn-at-startup "systemctl --user import-environment PATH XDG_DATA_DIRS"
 spawn-sh-at-startup "while ! busctl --user status org.gnome.Mutter.ScreenCast >/dev/null 2>&1; do sleep 0.2; done; pkill -f xdg-desktop-portal-gnome"
 
 spawn-sh-at-startup "swayidle -w timeout 300 'swaylock -f' timeout 600 'niri msg action power-off-monitors' resume 'niri msg action power-on-monitors' before-sleep 'swaylock -f'"
-spawn-at-startup "waybar"
-spawn-at-startup "mako"
+// spawn-at-startup "waybar"
+// spawn-at-startup "mako"
 spawn-sh-at-startup "wl-clip-persist --clipboard regular"
 spawn-sh-at-startup "wl-paste --watch cliphist store"
 spawn-at-startup "kdeconnect-indicator"
 spawn-at-startup "blueman-applet"
 // spawn-sh-at-startup "~/Scripts/set-wallpaper random"
-spawn-sh-at-startup "swaybg -i $HOME/Pictures/Wallpapers/others/a_sculpture_of_a_man_with_a_face_on_his_head.png -m fill"
+// spawn-sh-at-startup "swaybg -i $HOME/Pictures/Wallpapers/others/a_sculpture_of_a_man_with_a_face_on_his_head.png -m fill"
+spawn-at-startup "noctalia"
 spawn-sh-at-startup "$HOME/Scripts/battery-monitor"
 
 
@@ -145,34 +146,40 @@ blur {
 
 animations {
     workspace-switch {
-        spring damping-ratio=1.0 stiffness=1000 epsilon=0.0001
+        spring damping-ratio=1.0 stiffness=1100 epsilon=0.0001
     }
     window-open {
-        duration-ms 100
-        curve "ease-out-quad"
+        duration-ms 120
+        curve "ease-out-expo"
     }
     window-close {
-        duration-ms 100
-        curve "ease-out-cubic"
+        duration-ms 120
+        curve "ease-out-quad"
     }
     horizontal-view-movement {
         spring damping-ratio=1.0 stiffness=900 epsilon=0.0001
     }
     window-movement {
-        spring damping-ratio=1.0 stiffness=800 epsilon=0.0001
+        spring damping-ratio=1.0 stiffness=900 epsilon=0.0001
     }
     window-resize {
-        spring damping-ratio=1.0 stiffness=1000 epsilon=0.0001
+        spring damping-ratio=1.0 stiffness=900 epsilon=0.0001
     }
     config-notification-open-close {
         spring damping-ratio=0.6 stiffness=1200 epsilon=0.001
     }
+    exit-confirmation-open-close {
+        spring damping-ratio=0.6 stiffness=700 epsilon=0.01
+    }
     screenshot-ui-open {
-        duration-ms 300
+        duration-ms 150
         curve "ease-out-quad"
     }
     overview-open-close {
-        spring damping-ratio=1.0 stiffness=900 epsilon=0.0001
+        spring damping-ratio=1.0 stiffness=1000 epsilon=0.0001
+    }
+    recent-windows-close {
+        spring damping-ratio=1.0 stiffness=800 epsilon=0.001
     }
 }
 
@@ -182,29 +189,29 @@ animations {
 // ╰───────────────────────────────────────────────────────────────────────╯
 
 // Blur behind waybar
-layer-rule {
-    match namespace="waybar"
-    background-effect {
-        blur true
-        xray false
-    }
-}
+// layer-rule {
+//     match namespace="waybar"
+//     background-effect {
+//         blur true
+//         xray false
+//     }
+// }
 
 // Waybar shadow & rounded corners
-layer-rule {
-    match namespace="waybar"
-    match at-startup=true
-    opacity 0.90
-
-    shadow {
-        on
-        softness 10
-        spread 5
-        offset x=0 y=5
-    }
-
-    geometry-corner-radius 10
-}
+// layer-rule {
+//     match namespace="waybar"
+//     match at-startup=true
+//     opacity 0.90
+//
+//     shadow {
+//         on
+//         softness 10
+//         spread 5
+//         offset x=0 y=5
+//     }
+//
+//     geometry-corner-radius 10
+// }
 
 // Fuzzel blur & transparency
 layer-rule {
@@ -287,6 +294,14 @@ window-rule {
     open-floating true
     default-column-width { proportion 0.6; }
     default-window-height { proportion 0.7; }
+}
+
+// Noctalia settings window
+window-rule {
+    match app-id="dev.noctalia.Noctalia"
+    open-floating true
+    default-column-width { fixed 1080; }
+    default-window-height { fixed 920; }
 }
 
 // Floating terminal apps
@@ -437,6 +452,7 @@ binds {
 
 
     // ─── Audio Controls ───
+    Alt+V                               repeat=false hotkey-overlay-title="Push-to-Talk (VOX)" { spawn "voxtype" "record" "toggle"; }
     XF86AudioRaiseVolume                allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1+"; }
     XF86AudioLowerVolume                allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1-"; }
     XF86AudioMute                       allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }

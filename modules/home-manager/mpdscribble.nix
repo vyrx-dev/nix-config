@@ -19,7 +19,7 @@
     enable = true;
 
     endpoints."last.fm" = {
-      username = "theamit.969@gmail.com";
+      username = "Amit-69";
       passwordFile = "${config.home.homeDirectory}/.config/mpdscribble/lastfm-password";
     };
   };

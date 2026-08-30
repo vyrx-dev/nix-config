@@ -63,6 +63,20 @@
   services.upower.enable = true;
   services.power-profiles-daemon.enable = true;
 
+  # Noctalia desktop shell (v5)
+  programs.noctalia = {
+    enable = true;
+    # Re-enables NetworkManager, Bluetooth, UPower, and power-profiles service
+    # if missing. They are already enabled above, this just keeps them consistent.
+    recommendedServices.enable = true;
+  };
+
+  # Noctalia prebuilt binary cache (also declared in flake.nix nixConfig).
+  nix.settings = {
+    extra-substituters = ["https://noctalia.cachix.org"];
+    extra-trusted-public-keys = ["noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="];
+  };
+
   # ╭───────────────────────────────────────────────────────────────────────╮
   # │ GRAPHICS (NVIDIA PRIME OFFLOAD)                                       │
   # ╰───────────────────────────────────────────────────────────────────────╯

@@ -19,5 +19,7 @@
     ./cursor.nix
     ./theme.nix
     ./polkit.nix
+    ./ai-usagebar.nix
+    ./voxtype.nix
   ];
 }

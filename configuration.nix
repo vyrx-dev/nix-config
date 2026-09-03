@@ -240,7 +240,7 @@
   users.users."vyrx" = {
     isNormalUser = true;
     description = "vyrx";
-    extraGroups = ["networkmanager" "wheel" "i2c" "seat" "video" "render"];
+    extraGroups = ["networkmanager" "wheel" "i2c" "seat" "video" "render" "libvirtd" "docker"];
   };
 
   users.defaultUserShell = pkgs.fish;
@@ -272,6 +272,11 @@
   security.sudo.extraConfig = ''
     Defaults env_keep += "SUDO_EDITOR"
   '';
+
+  services.openssh = {
+    enable = true;
+    settings.PasswordAuthentication = true;
+  };
 
   programs.ssh = {
     startAgent = true;
@@ -348,12 +353,33 @@
   };
 
   # ╭───────────────────────────────────────────────────────────────────────╮
+  # │ VIRTUALIZATION                                                        │
+  # ╰───────────────────────────────────────────────────────────────────────╯
+
+  # GNOME Boxes / libvirt
+  virtualisation.libvirtd = {
+    enable = true;
+    qemu = {
+      package = pkgs.qemu_kvm;
+      runAsRoot = true;
+      swtpm.enable = true; # TPM emulation for Windows 11 / secure boot
+    };
+  };
+
+  # Docker
+  virtualisation.docker.enable = true;
+
+  # ╭───────────────────────────────────────────────────────────────────────╮
   # │ SYSTEM PACKAGES                                                       │
   # ╰───────────────────────────────────────────────────────────────────────╯
 
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
+    # ── Virtualization (GNOME Boxes) ────────────────────────────────────
+    gnome-boxes
+    # ── Containerization (Docker) ───────────────────────────────────────
+    lazydocker
     # ── Wayland / Desktop ───────────────────────────────────────────────
     swaybg
     swaylock-effects

@@ -376,10 +376,6 @@
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
-    # ── Virtualization (GNOME Boxes) ────────────────────────────────────
-    gnome-boxes
-    # ── Containerization (Docker) ───────────────────────────────────────
-    lazydocker
     # ── Wayland / Desktop ───────────────────────────────────────────────
     swaybg
     swaylock-effects
@@ -446,6 +442,8 @@
     shfmt
     hadolint
     hadolint
+    lazydocker
+    gnome-boxes
 
     # ── Media ────────────────────────────────────────────────────────────
     mpv

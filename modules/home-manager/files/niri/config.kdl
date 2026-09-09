@@ -91,11 +91,11 @@ spawn-sh-at-startup "swayidle -w timeout 300 'swaylock -f' timeout 600 'niri msg
 spawn-sh-at-startup "wl-clip-persist --clipboard regular"
 spawn-sh-at-startup "wl-paste --watch cliphist store"
 spawn-at-startup "kdeconnect-indicator"
-spawn-at-startup "blueman-applet"
+// spawn-at-startup "blueman-applet"
 // spawn-sh-at-startup "~/Scripts/set-wallpaper random"
 // spawn-sh-at-startup "swaybg -i $HOME/Pictures/Wallpapers/others/a_sculpture_of_a_man_with_a_face_on_his_head.png -m fill"
 spawn-at-startup "noctalia"
-spawn-sh-at-startup "$HOME/Scripts/battery-monitor"
+// spawn-sh-at-startup "$HOME/Scripts/battery-monitor"
 
 
 // ╭───────────────────────────────────────────────────────────────────────╮
@@ -196,7 +196,7 @@ animations {
 //         xray false
 //     }
 // }
-
+//
 // Waybar shadow & rounded corners
 // layer-rule {
 //     match namespace="waybar"
@@ -268,6 +268,7 @@ window-rule {
 window-rule {
     match app-id="com.mitchellh.ghostty"
     match app-id="kitty"
+    match app-id="foot"
     open-maximized false
     opacity 1.0
     draw-border-with-background false
@@ -306,14 +307,14 @@ window-rule {
 
 // Floating terminal apps
 window-rule {
-    match app-id="com.mitchellh.ghostty" title="rmpc-music"
-    match app-id="com.mitchellh.ghostty" title="toofan-tui"
-    match app-id="com.mitchellh.ghostty" title="btop-system"
-    match app-id="com.mitchellh.ghostty" title="yazi-files"
-    match app-id="com.mitchellh.ghostty" title="webapp-list"
-    match app-id="com.mitchellh.ghostty" title="gh-notify"
-    match app-id="com.mitchellh.ghostty" title="wiremix"
-    match app-id="com.mitchellh.ghostty" title="wifitui"
+    match app-id="foot" title="rmpc-music"
+    match app-id="foot" title="toofan-tui"
+    match app-id="foot" title="btop-system"
+    match app-id="foot" title="yazi-files"
+    match app-id="foot" title="webapp-list"
+    match app-id="foot" title="gh-notify"
+    match app-id="foot" title="wiremix"
+    match app-id="foot" title="wifitui"
     open-floating true
     default-column-width { proportion 0.6; }
     default-window-height { proportion 0.7; }
@@ -321,7 +322,7 @@ window-rule {
 
 // gh-dash fullscreen
 window-rule {
-    match app-id="com.mitchellh.ghostty" title="gh-dash"
+    match app-id="foot" title="gh-dash"
     open-fullscreen true
 }
 
@@ -370,30 +371,28 @@ window-rule {
 
 binds {
     // ─── Core Applications ───
-    Mod+Return                          hotkey-overlay-title="Terminal" { spawn "ghostty"; }
+    Mod+Return                          hotkey-overlay-title="Terminal" { spawn "foot"; }
     Mod+Space                           repeat=false hotkey-overlay-title="App Launcher" { spawn "fuzzel"; }
     Mod+B                               hotkey-overlay-title="Brave Browser" { spawn "brave"; }
     Mod+Shift+B                         hotkey-overlay-title="Brave (Private)" { spawn "brave" "--incognito"; }
     Mod+E                               hotkey-overlay-title="Thunar" { spawn "thunar"; }
-    Mod+C                               hotkey-overlay-title="Zed Editor" { spawn "zed"; }
+    Mod+C                               hotkey-overlay-title="Zed Editor" { spawn "zeditor"; }
     Mod+D                               hotkey-overlay-title="Discord" { spawn "vesktop"; }
     Mod+M                               hotkey-overlay-title="Spotify" { spawn "spotify"; }
-    Mod+SHIFT+G                         hotkey-overlay-title="Email" { spawn "geary"; }
 
     // ─── Terminal Applications ───
-    Mod+Shift+D                         hotkey-overlay-title="Lazydocker" { spawn-sh "ghostty -e lazydocker"; }
-    Alt+Slash                           hotkey-overlay-title="btop" { spawn-sh "ghostty --title='btop-system' -e btop"; }
-    Alt+N                               hotkey-overlay-title="Neovim" { spawn-sh "ghostty -e nvim"; }
-    Alt+Q                               hotkey-overlay-title="Yazi" { spawn-sh "ghostty --title='yazi-files' -e yazi"; }
-    Alt+M                               hotkey-overlay-title="rmpc" { spawn-sh "ghostty --title='rmpc-music' -e rmpc"; }
-    Alt+I                               hotkey-overlay-title="Switch Waybar" { spawn-sh "~/Scripts/switch-waybar-nix"; }
-    Alt+T                               hotkey-overlay-title="Toofan" { spawn-sh "ghostty --title='toofan-tui' -e toofan"; }
-    Alt+G                               hotkey-overlay-title="gh-dash" { spawn-sh "ghostty --title='gh-dash' -e gh-dash"; }
-    Alt+S                               hotkey-overlay-title="Volume Mixer" { spawn-sh "ghostty --title='wiremix' -e wiremix"; }
-    Alt+W                               hotkey-overlay-title="WiFi" { spawn-sh "ghostty --title='wifitui' -e wifitui"; }
+    Mod+Shift+D                         hotkey-overlay-title="Lazydocker" { spawn-sh "foot -e lazydocker"; }
+    Alt+Slash                           hotkey-overlay-title="btop" { spawn-sh "foot --title='btop-system' -e btop"; }
+    Alt+N                               hotkey-overlay-title="Neovim" { spawn-sh "foot -e nvim"; }
+    Alt+Q                               hotkey-overlay-title="Yazi" { spawn-sh "foot --title='yazi-files' -e yazi"; }
+    Alt+M                               hotkey-overlay-title="rmpc" { spawn-sh "foot --title='rmpc-music' -e rmpc"; }
+    Alt+T                               hotkey-overlay-title="Toofan" { spawn-sh "foot --title='toofan-tui' -e toofan"; }
+    Alt+G                               hotkey-overlay-title="gh-dash" { spawn-sh "foot --title='gh-dash' -e gh-dash"; }
+    Alt+S                               hotkey-overlay-title="Volume Mixer" { spawn-sh "foot --title='wiremix' -e wiremix"; }
+    Alt+W                               hotkey-overlay-title="WiFi" { spawn-sh "foot --title='wifitui' -e wifitui"; }
     Alt+B                               hotkey-overlay-title="Books" { spawn "foliate"; }
+    Alt+Space                           hotkey-overlay-title="Attach Tmux" { spawn-sh "foot -e tmux a"; }
     Alt+L                               hotkey-overlay-title="Suspend & Lock" { spawn-sh "systemctl suspend && swaylock"; }
-    Alt+Space                           hotkey-overlay-title="Attach Tmux" { spawn-sh "ghostty -e tmux a"; }
     // Alt+Return                       { spawn-sh "ghostty --title='gh-notify' -e sh -c 'gh notify; read'"; }
 
     // ─── Web Applications ───
@@ -404,6 +403,7 @@ binds {
     Alt+C                               hotkey-overlay-title="Google Calendar" { spawn-sh "~/Scripts/launch-webapp https://calendar.google.com"; }
     Mod+Y                               hotkey-overlay-title="YouTube" { spawn-sh "~/Scripts/launch-webapp https://youtube.com"; }
     Mod+G                               hotkey-overlay-title="GitHub" { spawn-sh "~/Scripts/launch-webapp https://github.com"; }
+    Mod+Shift+G                         hotkey-overlay-title="Gmail" { spawn-sh "~/Scripts/launch-webapp https://mail.google.com"; }
     Mod+W                               hotkey-overlay-title="WhatsApp" { spawn-sh "~/Scripts/launch-webapp https://web.whatsapp.com"; }
     Mod+X                               hotkey-overlay-title="X" { spawn-sh "~/Scripts/launch-webapp https://x.com"; }
     Mod+Backslash                       hotkey-overlay-title="DevHints" { spawn-sh "~/Scripts/launch-webapp https://devhints.io"; }
@@ -422,7 +422,6 @@ binds {
     Mod+SHIFT+M                         hotkey-overlay-title="Online Music" { spawn-sh "~/Scripts/beats"; }
     Mod+Shift+Backspace                 hotkey-overlay-title="Mirror Phone" { spawn-sh "~/Scripts/run-scrcpy mirror"; }
     Mod+Ctrl+Backspace                  hotkey-overlay-title="Phone Webcam" { spawn-sh "~/Scripts/run-scrcpy webcam"; }
-    Mod+Alt+Return                      hotkey-overlay-title="Attach Tmux" { spawn-sh "ghostty -e tmux a"; }
     Mod+Alt+N                           hotkey-overlay-title="Night Light" { spawn-sh "~/Scripts/toggle-wlsunset"; }
     Mod+Alt+Space                       hotkey-overlay-title="vyrx.dev" { spawn-sh "~/Scripts/launch-webapp https://vyrx.dev"; }
     Print                               hotkey-overlay-title="Color Picker" { spawn "hyprpicker" "-a"; }

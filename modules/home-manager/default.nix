@@ -21,5 +21,7 @@
     ./polkit.nix
     ./ai-usagebar.nix
     ./voxtype.nix
+    ./herdr.nix
+    ./topgrade.nix
   ];
 }

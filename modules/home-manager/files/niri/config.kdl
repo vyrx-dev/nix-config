@@ -93,7 +93,7 @@ spawn-at-startup "kdeconnect-indicator"
 // spawn-sh-at-startup "~/Scripts/set-wallpaper random"
 // spawn-sh-at-startup "swaybg -i $HOME/Pictures/Wallpapers/others/a_sculpture_of_a_man_with_a_face_on_his_head.png -m fill"
 spawn-at-startup "noctalia"
-spawn-sh-at-startup "$HOME/Scripts/battery-monitor"
+// spawn-sh-at-startup "$HOME/Scripts/battery-monitor"
 
 
 // ╭───────────────────────────────────────────────────────────────────────╮

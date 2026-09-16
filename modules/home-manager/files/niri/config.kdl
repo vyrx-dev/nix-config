@@ -29,7 +29,7 @@ environment {
     XDG_SESSION_TYPE "wayland"
     XDG_CURRENT_DESKTOP "niri"
     QT_QPA_PLATFORMTHEME "qt6ct"
-    TERMINAL "ghsotty"
+    TERMINAL "foot"
     XCURSOR_THEME "Bibata-Modern-Ice"
     XCURSOR_SIZE "24"
 }
@@ -81,8 +81,6 @@ output "HDMI-A-1" {
 // │ STARTUP APPLICATIONS                                                  │
 // ╰───────────────────────────────────────────────────────────────────────╯
 
-spawn-at-startup "dbus-update-activation-environment" "--systemd" "--all"
-spawn-at-startup "systemctl --user import-environment PATH XDG_DATA_DIRS"
 spawn-sh-at-startup "while ! busctl --user status org.gnome.Mutter.ScreenCast >/dev/null 2>&1; do sleep 0.2; done; pkill -f xdg-desktop-portal-gnome"
 
 spawn-sh-at-startup "swayidle -w timeout 300 'swaylock -f' timeout 600 'niri msg action power-off-monitors' resume 'niri msg action power-on-monitors' before-sleep 'swaylock -f'"
@@ -95,7 +93,7 @@ spawn-at-startup "kdeconnect-indicator"
 // spawn-sh-at-startup "~/Scripts/set-wallpaper random"
 // spawn-sh-at-startup "swaybg -i $HOME/Pictures/Wallpapers/others/a_sculpture_of_a_man_with_a_face_on_his_head.png -m fill"
 spawn-at-startup "noctalia"
-// spawn-sh-at-startup "$HOME/Scripts/battery-monitor"
+spawn-sh-at-startup "$HOME/Scripts/battery-monitor"
 
 
 // ╭───────────────────────────────────────────────────────────────────────╮
@@ -196,7 +194,7 @@ animations {
 //         xray false
 //     }
 // }
-//
+
 // Waybar shadow & rounded corners
 // layer-rule {
 //     match namespace="waybar"
@@ -266,8 +264,6 @@ window-rule {
 
 // Terminal windows
 window-rule {
-    match app-id="com.mitchellh.ghostty"
-    match app-id="kitty"
     match app-id="foot"
     open-maximized false
     opacity 1.0
@@ -308,6 +304,7 @@ window-rule {
 // Floating terminal apps
 window-rule {
     match app-id="foot" title="rmpc-music"
+    match app-id="foot" title="cliamp-music"
     match app-id="foot" title="toofan-tui"
     match app-id="foot" title="btop-system"
     match app-id="foot" title="yazi-files"
@@ -386,14 +383,15 @@ binds {
     Alt+N                               hotkey-overlay-title="Neovim" { spawn-sh "foot -e nvim"; }
     Alt+Q                               hotkey-overlay-title="Yazi" { spawn-sh "foot --title='yazi-files' -e yazi"; }
     Alt+M                               hotkey-overlay-title="rmpc" { spawn-sh "foot --title='rmpc-music' -e rmpc"; }
+    Mod+Alt+M                           hotkey-overlay-title="rmpc" { spawn-sh "foot --title='cliamp-music' -e cliamp"; }
     Alt+T                               hotkey-overlay-title="Toofan" { spawn-sh "foot --title='toofan-tui' -e toofan"; }
     Alt+G                               hotkey-overlay-title="gh-dash" { spawn-sh "foot --title='gh-dash' -e gh-dash"; }
     Alt+S                               hotkey-overlay-title="Volume Mixer" { spawn-sh "foot --title='wiremix' -e wiremix"; }
     Alt+W                               hotkey-overlay-title="WiFi" { spawn-sh "foot --title='wifitui' -e wifitui"; }
     Alt+B                               hotkey-overlay-title="Books" { spawn "foliate"; }
-    Alt+Space                           hotkey-overlay-title="Attach Tmux" { spawn-sh "foot -e tmux a"; }
     Alt+L                               hotkey-overlay-title="Suspend & Lock" { spawn-sh "systemctl suspend && swaylock"; }
-    // Alt+Return                       { spawn-sh "ghostty --title='gh-notify' -e sh -c 'gh notify; read'"; }
+    Alt+Space                           hotkey-overlay-title="Attach Tmux" { spawn-sh "foot -e tmux a"; }
+    // Alt+Return                       { spawn-sh "foot --title='gh-notify' -e sh -c 'gh notify; read'"; }
 
     // ─── Web Applications ───
     Mod+A                               hotkey-overlay-title="ChatGPT" { spawn-sh "~/Scripts/launch-webapp https://chatgpt.com"; }
@@ -403,38 +401,46 @@ binds {
     Alt+C                               hotkey-overlay-title="Google Calendar" { spawn-sh "~/Scripts/launch-webapp https://calendar.google.com"; }
     Mod+Y                               hotkey-overlay-title="YouTube" { spawn-sh "~/Scripts/launch-webapp https://youtube.com"; }
     Mod+G                               hotkey-overlay-title="GitHub" { spawn-sh "~/Scripts/launch-webapp https://github.com"; }
-    Mod+Shift+G                         hotkey-overlay-title="Gmail" { spawn-sh "~/Scripts/launch-webapp https://mail.google.com"; }
+    Mod+Shift+G                         hotkey-overlay-title="GitHub" { spawn-sh "~/Scripts/launch-webapp https://mail.google.com"; }
     Mod+W                               hotkey-overlay-title="WhatsApp" { spawn-sh "~/Scripts/launch-webapp https://web.whatsapp.com"; }
     Mod+X                               hotkey-overlay-title="X" { spawn-sh "~/Scripts/launch-webapp https://x.com"; }
     Mod+Backslash                       hotkey-overlay-title="DevHints" { spawn-sh "~/Scripts/launch-webapp https://devhints.io"; }
-    Mod+Shift+I                         hotkey-overlay-title="Remove Webapps" { spawn-sh "ghostty --title='webapp-list' -e ~/Scripts/webapp-remove"; }
-    // Mod+I                            { spawn-sh "ghostty --title='webapp-list' -e ~/Scripts/webapps"; }
+    Mod+Shift+I                         hotkey-overlay-title="Remove Webapps" { spawn-sh "foot --title='webapp-list' -e ~/Scripts/webapp-remove"; }
+    Mod+I                               hotkey-overlay-title="Caffeine Toggle" { spawn-sh "noctalia msg caffeine-toggle"; }
 
-    // ─── Wallpaper ───
-    Ctrl+Alt+Space                      hotkey-overlay-title="Random Wallpaper" { spawn-sh "~/Scripts/set-wallpaper random"; }
-    Mod+Ctrl+Shift+Space                hotkey-overlay-title="Choose Wallpaper" { spawn-sh "~/Scripts/set-wallpaper choose"; }
+    // ─── Desktop & Theme ───
+    Ctrl+Alt+Space                      hotkey-overlay-title="Random Wallpaper" { spawn-sh "noctalia msg wallpaper-random"; }
+    Mod+Ctrl+Shift+Space                hotkey-overlay-title="Choose Wallpaper" { spawn-sh "noctalia msg panel-toggle wallpaper"; }
+    Mod+Alt+Right                       hotkey-overlay-title="Next Wallpaper" { spawn-sh "noctalia msg wallpaper-next"; }
+    Mod+Alt+Left                        hotkey-overlay-title="Previous Wallpaper" { spawn-sh "noctalia msg wallpaper-previous"; }
+    Mod+Alt+T                           hotkey-overlay-title="Toggle Theme (Dark/Light)" { spawn-sh "noctalia msg theme-mode-toggle"; }
 
     // ─── Utilities ───
     Alt+comma                           hotkey-overlay-title="Clipboard History" { spawn-sh "cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"; }
     Alt+period                          hotkey-overlay-title="Emoji Picker" { spawn-sh "~/Scripts/fuzzel-emoji"; }
     Mod+Backspace                       hotkey-overlay-title="Terminal Transparency" { spawn-sh "~/Scripts/toggle-terminal-transparency"; }
-    Mod+Shift+Space                     hotkey-overlay-title="Toggle Waybar" { spawn-sh "~/Scripts/toggle-waybar"; }
+    // Mod+Shift+Space                     hotkey-overlay-title="Toggle Waybar" { spawn-sh "~/Scripts/toggle-waybar"; }
     Mod+SHIFT+M                         hotkey-overlay-title="Online Music" { spawn-sh "~/Scripts/beats"; }
     Mod+Shift+Backspace                 hotkey-overlay-title="Mirror Phone" { spawn-sh "~/Scripts/run-scrcpy mirror"; }
     Mod+Ctrl+Backspace                  hotkey-overlay-title="Phone Webcam" { spawn-sh "~/Scripts/run-scrcpy webcam"; }
     Mod+Alt+N                           hotkey-overlay-title="Night Light" { spawn-sh "~/Scripts/toggle-wlsunset"; }
     Mod+Alt+Space                       hotkey-overlay-title="vyrx.dev" { spawn-sh "~/Scripts/launch-webapp https://vyrx.dev"; }
     Print                               hotkey-overlay-title="Color Picker" { spawn "hyprpicker" "-a"; }
-    Mod+Alt+P                           hotkey-overlay-title="Android Emulator" { spawn-sh "env QT_QPA_PLATFORM=xcb ~/Android/Sdk/emulator/emulator -avd Pixel_9_Pro &"; }
+    Mod+Alt+E                           hotkey-overlay-title="Android Emulator" { spawn-sh "env QT_QPA_PLATFORM=xcb ~/Android/Sdk/emulator/emulator -avd Pixel_9_Pro &"; }
 
-    // ─── Notifications ───
-    Mod+N                               hotkey-overlay-title="Restore Notification" { spawn "makoctl" "restore"; }
-    Mod+Shift+N                         hotkey-overlay-title="Dismiss All" { spawn "makoctl" "dismiss" "-a"; }
-    Mod+Ctrl+N                          hotkey-overlay-title="Do Not Disturb" { spawn "makoctl" "mode" "-t" "do-not-disturb"; }
+    // ─── System & Notifications ───
+    Mod+Shift+Space                     hotkey-overlay-title="Toggle Status Bar" { spawn "noctalia" "msg" "bar-toggle"; }
+    Mod+Period                          hotkey-overlay-title="Control Center" { spawn-sh "noctalia msg panel-toggle control-center"; }
+    Mod+Comma                           hotkey-overlay-title="System Panel" { spawn-sh "noctalia msg panel-toggle control-center system"; }
+    Mod+N                               hotkey-overlay-title="Notification History" { spawn-sh "noctalia msg panel-toggle control-center notifications"; }
+    Mod+Ctrl+N                          hotkey-overlay-title="Clear Active Notifications" { spawn-sh "noctalia msg notification-clear-active"; }
+    Mod+Shift+W                         hotkey-overlay-title="Weather" { spawn-sh "noctalia msg panel-toggle control-center weather"; }
+    Mod+Shift+N                         hotkey-overlay-title="Toggle Do Not Disturb" { spawn-sh "noctalia msg notification-dnd-toggle"; }
 
     // ─── Screenshots & Recording ───
-    Mod+P                               hotkey-overlay-title="Screenshot" { spawn-sh "$HOME/Scripts/screenshot"; }
-    Mod+Shift+P                         hotkey-overlay-title="Screenshot (Fullscreen)" { spawn-sh "$HOME/Scripts/screenshot fullscreen"; }
+    Mod+P                               hotkey-overlay-title="Screenshot (Fullscreen)" { spawn-sh "noctalia msg screenshot-fullscreen"; }
+    Mod+Shift+P                         hotkey-overlay-title="Screenshot (Region)" { spawn-sh "noctalia msg screenshot-region"; }
+    Mod+Alt+P                           hotkey-overlay-title="Screenshot (Annotate)" { spawn-sh "noctalia msg screenshot-annotate"; }
     Mod+R                               hotkey-overlay-title="Record Screen (Desktop Audio)" { spawn-sh "~/Scripts/screenrecord --with-desktop-audio"; }
     Mod+Shift+R                         hotkey-overlay-title="Record Screen (Microphone)" { spawn-sh "~/Scripts/screenrecord --with-microphone-audio"; }
     Mod+Alt+R                           hotkey-overlay-title="Record Screen (Region)" { spawn-sh "~/Scripts/screenrecord --with-desktop-audio --region"; }

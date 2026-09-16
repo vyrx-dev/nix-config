@@ -56,26 +56,12 @@
 
   # Cap battery charge at 60% to reduce wear
   services.udev.extraRules = ''
-    ACTION=="add|change", KERNEL=="BAT0", SUBSYSTEM=="power_supply", ATTR{charge_control_end_threshold}="60"
+    ACTION=="add", KERNEL=="BAT0", SUBSYSTEM=="power_supply", ATTR{charge_control_end_threshold}="60"
   '';
 
   services.blueman.enable = true;
   services.upower.enable = true;
   services.power-profiles-daemon.enable = true;
-
-  # Noctalia desktop shell (v5)
-  programs.noctalia = {
-    enable = true;
-    # Re-enables NetworkManager, Bluetooth, UPower, and power-profiles service
-    # if missing. They are already enabled above, this just keeps them consistent.
-    recommendedServices.enable = true;
-  };
-
-  # Noctalia prebuilt binary cache (also declared in flake.nix nixConfig).
-  nix.settings = {
-    extra-substituters = ["https://noctalia.cachix.org"];
-    extra-trusted-public-keys = ["noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="];
-  };
 
   # ╭───────────────────────────────────────────────────────────────────────╮
   # │ GRAPHICS (NVIDIA PRIME OFFLOAD)                                       │
@@ -262,6 +248,19 @@
   # │ CORE PROGRAMS                                                         │
   # ╰───────────────────────────────────────────────────────────────────────╯
 
+  programs.nix-ld = {
+    enable = true;
+    libraries = with pkgs; [
+      wayland
+      libxkbcommon
+      libGL
+      fontconfig
+      libx11
+      libxcursor
+      libxrandr
+      libxi
+    ];
+  };
   programs.fish.enable = true;
 
   programs.neovim = {
@@ -391,9 +390,9 @@
     glib # gsettings CLI for sway dconf theming
     bibata-cursors
     adwaita-icon-theme
+    noctalia
 
     # ── Terminal & Shell ─────────────────────────────────────────────────
-    ghostty
     tmux
     gum
     fzf
@@ -414,7 +413,6 @@
     zed-editor
     nixd
     alejandra
-    grok-build
 
     # ── Development Tools ────────────────────────────────────────────────
     github-cli
@@ -441,13 +439,13 @@
     shellcheck
     shfmt
     hadolint
-    hadolint
     lazydocker
     gnome-boxes
 
     # ── Media ────────────────────────────────────────────────────────────
     mpv
     yt-dlp
+    cliamp
     obs-studio
     gpu-screen-recorder
     imagemagick
@@ -459,7 +457,6 @@
     brave
     inputs.zen-browser.packages."x86_64-linux".default
     vesktop
-    geary
     localsend
     telegram-desktop
     opencode

@@ -34,7 +34,7 @@ set $left h
 set $down j
 set $up k
 set $right l
-set $term kitty
+set $term foot
 set $menu fuzzel
 
 # ╭───────────────────────────────────────────────────────────────────────╮
@@ -98,26 +98,26 @@ seat * hide_cursor when-typing enable
 assign [app_id="code"] workspace number 2
 assign [app_id="dev.zed.Zed"] workspace number 2
 assign [app_id="org.telegram.desktop"] workspace number 7
-assign [app_id="obsidian"] workspace number 8
+assign [app_id="md.Obsidian"] workspace number 8
 assign [app_id="spotify"] workspace number 9
 assign [app_id="vesktop"] workspace number 10
-assign [app_id="chrome-web.whatsapp.com__-Default"] workspace number 5
-assign [app_id="chrome-app.todoist.com__app-Default"] workspace number 6
+assign [app_id="brave-web.whatsapp.com__-Default"] workspace number 5
+assign [app_id="brave-app.todoist.com__app-Default"] workspace number 6
 
 # ─── Focus ───
 for_window [app_id="vesktop"] focus
-for_window [app_id="obsidian"] focus
+for_window [app_id="md.Obsidian"] focus
 for_window [app_id="spotify"] focus
 for_window [app_id="code"] focus
 for_window [app_id="dev.zed.Zed"] focus
 for_window [app_id="org.telegram.desktop"] focus
-for_window [app_id="chrome-app.todoist.com__app-Default"] focus
-for_window [app_id="chrome-web.whatsapp.com__-Default"] focus
+for_window [app_id="brave-app.todoist.com__app-Default"] focus
+for_window [app_id="brave-web.whatsapp.com__-Default"] focus
 for_window [app_id="mpv"] focus
 
 # ─── Floating Windows ───
 for_window [app_id="mpv"] floating enable, resize set width 960 height 540, move position center
-for_window [app_id="org.xfce.Thunar"] floating enable, resize set width 1000 height 600, move position center
+for_window [app_id="thunar"] floating enable, resize set width 1000 height 600, move position center
 for_window [class="feh"] floating enable, resize set width 960 height 540, move position center
 for_window [app_id="com.github.wwmm.easyeffects"] floating enable, resize set 1000 600, move position center
 for_window [app_id="com.vyrx.kanshi-switch"] floating enable, resize set width 400 height 220, move position center
@@ -137,9 +137,8 @@ bindsym $mod+Space exec $menu
 bindsym $mod+b exec brave
 bindsym $mod+Shift+b exec brave --incognito
 bindsym $mod+e exec thunar
-bindsym $mod+c exec zed
+bindsym $mod+c exec zeditor  
 bindsym $mod+o exec obsidian
-bindsym $mod+Shift+G exec geary
 bindsym $mod+d exec vesktop
 bindsym $mod+m exec spotify
 bindsym Alt+b exec foliate
@@ -149,14 +148,14 @@ bindsym Alt+b exec foliate
 bindsym $mod+q kill
 
 # ─── Terminal Applications ───
-bindsym Alt+slash exec ghostty --title='btop' -e btop
-bindsym Alt+M exec ghostty  --title='rmpc' -e rmpc
-bindsym Alt+Q exec ghostty  --title='yazi' -e yazi
-bindsym Alt+G exec ghostty --title='gh-dash' -e gh-dash
-bindsym Alt+S exec ghostty --title='wiremix' -e wiremix
-bindsym Alt+W exec ghostty --title='wifitui' -e wifitui
-bindsym Alt+N exec kitty -e nvim
-bindsym Alt+Escape exec kitty -e tmux a
+bindsym Alt+slash exec foot --title='btop' -e btop
+bindsym Alt+M exec foot  --title='rmpc' -e rmpc
+bindsym Alt+Q exec foot  --title='yazi' -e yazi
+bindsym Alt+G exec foot --title='gh-dash' -e gh-dash
+bindsym Alt+S exec foot --title='wiremix' -e wiremix
+bindsym Alt+W exec foot --title='wifitui' -e wifitui
+bindsym Alt+N exec foot -e nvim
+bindsym Alt+Escape exec foot -e tmux a
 bindsym Alt+I exec ~/Scripts/switch-waybar-nix
 
 # ─── Web Applications ───
@@ -168,6 +167,7 @@ bindsym $mod+Y exec ~/Scripts/launch-webapp https://youtube.com
 bindsym $mod+G exec ~/Scripts/launch-webapp https://github.com
 bindsym $mod+X exec ~/Scripts/launch-webapp https://X.com
 bindsym $mod+Shift+W exec ~/Scripts/launch-webapp https://web.whatsapp.com
+bindsym $mod+Shift+G exec ~/Scripts/launch-webapp https://mail.google.com
 bindsym $mod+Backslash exec ~/Scripts/launch-webapp https://devhints.io
 bindsym Alt+Space exec ~/Scripts/launch-webapp https://vyrx.dev
 
@@ -200,6 +200,7 @@ bindsym $mod+Shift+Space exec ~/Scripts/toggle-waybar
 bindsym $mod+Alt+p exec ~/Android/Sdk/emulator/emulator -avd Pixel_9_Pro &
 bindsym $mod+Shift+BackSpace exec ~/Scripts/run-scrcpy mirror
 bindsym $mod+Ctrl+BackSpace exec ~/Scripts/run-scrcpy webcam
+bindsym $mod+BackSpace exec ~/Scripts/toggle-terminal-transparency
 
 # ─── Others ───
 bindsym $mod+Alt+n exec ~/Scripts/toggle-wlsunset
@@ -225,7 +226,7 @@ bindsym --locked XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ 
 bindsym --locked XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
 bindsym --locked XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
 bindsym Alt+V exec voxtype record toggle
-bindsym $mod+Alt+m exec ~/Scripts/dual-dac
+bindsym $mod+Alt+m exec foot --title='cliamp-music' -e cliamp
 bindsym $mod+XF86AudioMute exec ~/Scripts/audio-switch
 
 # ─── Laptop Brightness ───

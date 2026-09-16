@@ -1,7 +1,6 @@
-{pkgs, ...}: {
+{...}: {
   programs.ghostty = {
     enable = true;
-    package = null; # managed as a system package in environment.systemPackages
     systemd.enable = false;
 
     settings = {

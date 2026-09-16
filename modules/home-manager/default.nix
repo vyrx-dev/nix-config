@@ -8,10 +8,11 @@
     ./sway.nix
     ./waybar.nix
     ./mako.nix
-    ./kitty.nix
+    # ./kitty.nix
+    ./foot.nix
     ./fuzzel.nix
     ./starship.nix
-    ./ghostty.nix
+    # ./ghostty.nix
     ./fish.nix
     ./tmux.nix
     ./kanshi.nix

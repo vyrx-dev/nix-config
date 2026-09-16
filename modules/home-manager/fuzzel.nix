@@ -8,7 +8,7 @@
         width = 60;
         lines = 10;
         prompt = "> ";
-        terminal = "kitty";
+        terminal = "foot";
         match-mode = "fuzzy";
         horizontal-pad = 12;
         vertical-pad = 8;

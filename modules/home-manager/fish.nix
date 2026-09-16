@@ -22,7 +22,7 @@
       set -gx EDITOR nvim
       set -gx SUDO_EDITOR nvim
       set -gx VISUAL nvim
-      set -gx TERMINAL kitty
+      set -gx TERMINAL foot
       set -gx MANPAGER "nvim +Man!"
       set -gx MPD_HOST "/run/user/"(id -u)"/mpd/socket"
 

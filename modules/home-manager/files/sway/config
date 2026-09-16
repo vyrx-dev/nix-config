@@ -126,6 +126,8 @@ for_window [title="wiremix"] floating enable, resize set width 800 height 500, m
 for_window [title="wifitui"] floating enable, resize set width 800 height 500, move position center
 for_window [title="btop"] floating enable, resize set width 900 height 700, move position center
 for_window [title="rmpc"] floating enable, resize set width 900 height 600, move position center
+for_window [title="cliamp-music"] floating enable, resize set width 900 height 600, move position center
+for_window [title="toofan-tui"] floating enable, resize set width 900 height 600, move position center
 for_window [title="yazi"] floating enable, resize set width 1100 height 700, move position center
 
 # ╭───────────────────────────────────────────────────────────────────────╮
@@ -150,6 +152,7 @@ bindsym $mod+q kill
 # ─── Terminal Applications ───
 bindsym Alt+slash exec foot --title='btop' -e btop
 bindsym Alt+M exec foot  --title='rmpc' -e rmpc
+bindsym Alt+t exec foot --title='toofan-tui' -e toofan
 bindsym Alt+Q exec foot  --title='yazi' -e yazi
 bindsym Alt+G exec foot --title='gh-dash' -e gh-dash
 bindsym Alt+S exec foot --title='wiremix' -e wiremix

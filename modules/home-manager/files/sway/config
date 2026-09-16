@@ -152,7 +152,7 @@ bindsym $mod+q kill
 # ─── Terminal Applications ───
 bindsym Alt+slash exec foot --title='btop' -e btop
 bindsym Alt+M exec foot  --title='rmpc' -e rmpc
-bindsym Alt+t exec foot --title='toofan-tui' -e toofan
+bindsym Alt+t exec foot --title='toofan-tui' -e ~/.local/bin/toofan
 bindsym Alt+Q exec foot  --title='yazi' -e yazi
 bindsym Alt+G exec foot --title='gh-dash' -e gh-dash
 bindsym Alt+S exec foot --title='wiremix' -e wiremix

@@ -384,7 +384,7 @@ binds {
     Alt+Q                               hotkey-overlay-title="Yazi" { spawn-sh "foot --title='yazi-files' -e yazi"; }
     Alt+M                               hotkey-overlay-title="rmpc" { spawn-sh "foot --title='rmpc-music' -e rmpc"; }
     Mod+Alt+M                           hotkey-overlay-title="rmpc" { spawn-sh "foot --title='cliamp-music' -e cliamp"; }
-    Alt+T                               hotkey-overlay-title="Toofan" { spawn-sh "foot --title='toofan-tui' -e toofan"; }
+    Alt+T                               hotkey-overlay-title="Toofan" { spawn-sh "foot --title='toofan-tui' -e ~/.local/bin/toofan"; }
     Alt+G                               hotkey-overlay-title="gh-dash" { spawn-sh "foot --title='gh-dash' -e gh-dash"; }
     Alt+S                               hotkey-overlay-title="Volume Mixer" { spawn-sh "foot --title='wiremix' -e wiremix"; }
     Alt+W                               hotkey-overlay-title="WiFi" { spawn-sh "foot --title='wifitui' -e wifitui"; }

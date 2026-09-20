@@ -375,6 +375,7 @@
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
+    tree-sitter
     # ── Wayland / Desktop ───────────────────────────────────────────────
     swaybg
     swaylock-effects

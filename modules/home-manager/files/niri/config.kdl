@@ -424,7 +424,7 @@ binds {
     Mod+Shift+Backspace                 hotkey-overlay-title="Mirror Phone" { spawn-sh "~/Scripts/run-scrcpy mirror"; }
     Mod+Ctrl+Backspace                  hotkey-overlay-title="Phone Webcam" { spawn-sh "~/Scripts/run-scrcpy webcam"; }
     Mod+Alt+N                           hotkey-overlay-title="Night Light" { spawn-sh "~/Scripts/toggle-wlsunset"; }
-    Mod+Alt+Space                       hotkey-overlay-title="vyrx.dev" { spawn-sh "~/Scripts/launch-webapp https://vyrx.dev"; }
+    Mod+Alt+Space                       hotkey-overlay-title="heyamit.dev" { spawn-sh "~/Scripts/launch-webapp https://heyamit.dev"; }
     Print                               hotkey-overlay-title="Color Picker" { spawn "hyprpicker" "-a"; }
     Mod+Alt+E                           hotkey-overlay-title="Android Emulator" { spawn-sh "env QT_QPA_PLATFORM=xcb ~/Android/Sdk/emulator/emulator -avd Pixel_9_Pro &"; }
 

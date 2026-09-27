@@ -195,7 +195,7 @@
     enable = true;
     settings = {
       initial_session = {
-        command = "${pkgs.sway}/bin/sway";
+        command = "${pkgs.niri}/bin/niri-session";
         user = "vyrx";
       };
       default_session = {

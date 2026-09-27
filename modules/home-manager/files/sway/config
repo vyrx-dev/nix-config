@@ -17,7 +17,7 @@ exec systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP PAT
 
 exec kanshi
 exec_always kanshictl reload
-exec waybar
+# exec waybar
 exec mako
 exec kdeconnect-indicator
 exec blueman-applet
@@ -69,7 +69,7 @@ exec swayidle -w \
 # ╭───────────────────────────────────────────────────────────────────────╮
 # │ APPEARANCE & BEHAVIOR                                                 │
 # ╰───────────────────────────────────────────────────────────────────────╯
-client.focused #718096 #404552 #f7fafc #718096 #718096
+client.focused #4c7899 #285577 #ffffff #4c7899 #4c7899
 
 gaps inner 5
 smart_gaps on
@@ -172,7 +172,7 @@ bindsym $mod+X exec ~/Scripts/launch-webapp https://X.com
 bindsym $mod+Shift+W exec ~/Scripts/launch-webapp https://web.whatsapp.com
 bindsym $mod+Shift+G exec ~/Scripts/launch-webapp https://mail.google.com
 bindsym $mod+Backslash exec ~/Scripts/launch-webapp https://devhints.io
-bindsym Alt+Space exec ~/Scripts/launch-webapp https://vyrx.dev
+bindsym Alt+Space exec ~/Scripts/launch-webapp https://heyamit.dev
 
 # ─── Utilities ───
 bindsym Alt+comma exec cliphist list | fuzzel --dmenu | cliphist decode | wl-copy
@@ -196,7 +196,8 @@ bindsym $mod+Shift+P exec ~/Scripts/screenshot fullscreen
 bindsym Alt+P exec hyprpicker -a
 
 # ─── Bar ───
-bindsym $mod+Shift+Space exec ~/Scripts/toggle-waybar
+# bindsym $mod+Shift+Space exec ~/Scripts/toggle-waybar
+bindsym $mod+Shift+Space bar mode toggle
 
 
 # ─── Mobile ───
@@ -320,3 +321,10 @@ mode "resize" {
 # │ INCLUDES                                                              │
 # ╰───────────────────────────────────────────────────────────────────────╯
 include /etc/sway/config.d/*
+
+bar {
+    position bottom
+    pango_markup enabled
+    tray_padding 1
+    status_command $HOME/.config/sway/sway-status.sh
+}

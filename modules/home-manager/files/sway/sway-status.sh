@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+loops=0
 while true; do
     read -r _ u1 n1 s1 i1 w1 r1 q1 _ < /proc/stat
     sleep 1
@@ -76,7 +77,25 @@ while true; do
         fi
     fi
 
+    # Nix flake age (check every 60 seconds)
+    if (( loops % 60 == 0 )); then
+        last_epoch=$(jq -r '[.nodes[].locked.lastModified // empty] | max' /etc/nixos/flake.lock 2>/dev/null)
+        if [[ -n "$last_epoch" && "$last_epoch" != "null" ]]; then
+            nix_days=$(( ($(date +%s) - last_epoch) / 86400 ))
+            [[ "$nix_days" == "0" ]] && nix_label="today" || nix_label="${nix_days}d"
+            if (( nix_days > 7 )); then
+                NIX="<span color='#ff5555'>❄ ${nix_label}</span>"
+            else
+                NIX="❄ ${nix_label}"
+            fi
+        else
+            NIX="❄ ?"
+        fi
+    fi
+
     TIME=$(date +"%a %Y-%m-%d %H:%M")
 
-    echo "CPU: ${CPU}% | ${TEMP_FMT} | RAM: ${RAM} | Disk: ${DISK}${BAT}${VOL} | ${NET}${MEDIA} | ${TIME}"
+    echo "CPU: ${CPU}% | ${TEMP_FMT} | RAM: ${RAM} | Disk: ${DISK}${BAT}${VOL} | ${NET} | ${NIX}${MEDIA} | ${TIME}"
+    
+    loops=$((loops + 1))
 done

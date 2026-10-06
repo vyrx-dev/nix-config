@@ -42,6 +42,5 @@
   # see and control MPD. Points at the services.mpd instance above.
   services.mpd-mpris = {
     enable = true;
-    mpd.useLocal = true;
   };
 }

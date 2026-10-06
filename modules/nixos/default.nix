@@ -2,5 +2,6 @@
 {...}: {
   imports = [
     ./niri.nix
+    ./codex-desktop.nix
   ];
 }

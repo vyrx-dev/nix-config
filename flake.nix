@@ -13,6 +13,8 @@
     voxtype.url = "github:peteonrails/voxtype";
     zen-browser.url = "github:youwen5/zen-browser-flake";
     herdr.url = "github:herdrdev/herdr-nix";
+    codex-desktop-linux.url = "github:ilysenko/codex-desktop-linux";
+    umbriel.url = "git+https://github.com/noctalia-dev/umbriel";
   };
 
   outputs = {
@@ -23,6 +25,8 @@
     ai-usagebar,
     voxtype,
     zen-browser,
+    codex-desktop-linux,
+    umbriel,
     ...
   } @ inputs: {
     nixosConfigurations."nixos-btw" = nixpkgs.lib.nixosSystem {
@@ -30,6 +34,7 @@
       specialArgs = {inherit inputs;};
       modules = [
         spicetify-nix.nixosModules.default
+        umbriel.nixosModules.default
 
         home-manager.nixosModules.home-manager
         {

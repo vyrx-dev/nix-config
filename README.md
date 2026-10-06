@@ -2,9 +2,11 @@
 
 ![Home Screen](assets/home.png)
 
-My NixOS config. It probably won't work on your machine out of the box, but feel free to look through it and steal whatever seems useful. That's honestly why I'm making it public.
+My NixOS config, featuring three different setups:
+- **Sway** (with custom apps)
+- **Niri** and **Umbriel** (with Noctalia)
 
-If you end up using something, a star would be cool. No pressure though.
+It probably won't work on your machine out of the box, but feel free to look through it and steal whatever seems useful. That's honestly why I'm making it public.
 
 ```bash
 git clone https://github.com/vyrx-dev/nix-config && cd nix-config

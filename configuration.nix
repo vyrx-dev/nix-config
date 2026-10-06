@@ -125,6 +125,8 @@
     wrapperFeatures.gtk = true; # Ensures GTK apps find themes, icons, and schemas
   };
 
+  programs.umbriel.enable = true;
+
   xdg.portal = {
     enable = true;
     wlr.enable = true; # Required for Sway screensharing and screenshots
@@ -139,6 +141,7 @@
       common.default = ["gtk"];
       sway.default = lib.mkForce ["wlr" "gtk"];
       # niri portal config lives in modules/nixos/niri.nix
+      umbriel.default = ["umbriel" "gtk"];
     };
 
     extraPortals = [
@@ -195,7 +198,7 @@
     enable = true;
     settings = {
       initial_session = {
-        command = "${pkgs.niri}/bin/niri-session";
+        command = "${pkgs.umbriel}/bin/start-umbriel";
         user = "vyrx";
       };
       default_session = {
@@ -414,6 +417,11 @@
     zed-editor
     nixd
     alejandra
+    code-cursor
+
+    # ── AI Agents & Assistants ───────────────────────────────────────────
+    opencode
+    t3code
 
     # ── Development Tools ────────────────────────────────────────────────
     github-cli
@@ -460,7 +468,6 @@
     vesktop
     localsend
     telegram-desktop
-    opencode
 
     # ── Files & Productivity ─────────────────────────────────────────────
     evince

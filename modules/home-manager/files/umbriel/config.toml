@@ -1,0 +1,423 @@
+# ╭──────────────────────────────────────────────────────────╮
+# │                    QUICK REFERENCE                       │
+# ╰──────────────────────────────────────────────────────────╯
+# Complete reference:               https://docs.noctalia.dev/umbriel/
+# umbriel outputs                   - List all connected monitors and modes
+# umbriel windows                   - List all active windows (useful for app_id)
+# umbriel config validate           - Check config for syntax errors
+# umbriel msg                       - Send IPC messages directly
+
+
+# ╭──────────────────────────────────────────────────────────╮
+# │                         INCLUDES                         │
+# ╰──────────────────────────────────────────────────────────╯
+
+[include]
+files = []
+
+[include.optional]
+files = []
+
+
+# ╭──────────────────────────────────────────────────────────╮
+# │                         GENERAL                          │
+# ╰──────────────────────────────────────────────────────────╯
+
+[general]
+autostart = ["noctalia"]
+# xwayland = false
+
+
+# ╭──────────────────────────────────────────────────────────╮
+# │                         OUTPUTS                          │
+# ╰──────────────────────────────────────────────────────────╯
+#
+# [output.DP-1]
+# mode = "2560x1440@144"
+# position = [0, 0]
+# scale = 1.25
+# vrr = "fullscreen"
+# hdr = "auto"
+
+
+# ╭──────────────────────────────────────────────────────────╮
+# │                        APPEARANCE                        │
+# ╰──────────────────────────────────────────────────────────╯
+[appearance.blur]
+optimized = true
+passes = 3
+radius = 5
+noise = 0.02
+brightness = 0.9
+contrast = 0.9
+saturation = 1.1
+
+
+
+# ╭──────────────────────────────────────────────────────────╮
+# │                     INPUT & TOUCHPAD                     │
+# ╰──────────────────────────────────────────────────────────╯
+[input.keyboard]
+numlock_toggle = true
+repeat_delay = 200
+repeat_rate = 60
+
+[input.touchpad]
+natural_scroll = true
+
+[input.focus]
+follows_mouse = true
+
+
+
+# ╭──────────────────────────────────────────────────────────╮
+# │                         KEYBINDS                         │
+# ╰──────────────────────────────────────────────────────────╯
+# Docs: https://docs.noctalia.dev/umbriel/keybinds/
+# Actions: https://docs.noctalia.dev/umbriel/actions/
+[keybinds]
+
+# ─── Core Applications ───
+"Mod+Return"                        = { action = "spawn:foot", repeat = false }
+"Mod+Ctrl+Return"                   = { action = "spawn:foot --app-id scratchpad-term", repeat = false }
+"Mod+Space"                         = "spawn:fuzzel"
+"Mod+B"                             = "spawn:brave"
+"Mod+Shift+B"                       = "spawn:brave --incognito"
+"Mod+E"                             = "spawn:thunar"
+"Mod+C"                             = "spawn:zeditor"
+"Mod+D"                             = "spawn:vesktop"
+"Mod+M"                             = "spawn:spotify"
+
+# ─── Terminal Applications ───
+"Mod+Shift+D"                       = "spawn:foot -e lazydocker"
+"Alt+Backslash"                     = "workspace-set-layout:toggle"
+"Alt+Slash"                         = "spawn:foot --app-id='btop-system' -e btop"
+"Alt+N"                             = "spawn:foot -e nvim"
+"Alt+Q"                             = "spawn:foot --app-id='yazi-files' -e yazi"
+"Alt+M"                             = "spawn:foot --app-id='rmpc-music' -e rmpc"
+"Mod+Alt+M"                         = "spawn:foot --app-id='cliamp-music' -e cliamp"
+"Alt+T"                             = "spawn:foot --app-id='toofan-tui' -e ~/.local/bin/toofan"
+"Alt+G"                             = "spawn:foot --app-id='gh-dash' -e gh-dash"
+"Alt+S"                             = "spawn:noctalia msg panel-toggle control-center audio"
+"Alt+W"                             = "spawn:noctalia msg panel-toggle control-center network"
+"Alt+B"                             = "spawn:foliate"
+"Alt+Space"                         = "spawn:foot -e tmux a"
+
+# ─── Web Applications ───
+"Mod+A"                             = "spawn:~/Scripts/launch-webapp https://chatgpt.com"
+"Mod+Shift+A"                       = "spawn:~/Scripts/launch-webapp https://gemini.google.com"
+"Mod+Alt+A"                         = "spawn:~/Scripts/launch-webapp https://claude.ai"
+"Mod+T"                             = "spawn:~/Scripts/launch-webapp https://todoist.com"
+"Alt+C"                             = "spawn:~/Scripts/launch-webapp https://calendar.google.com"
+"Mod+Y"                             = "spawn:~/Scripts/launch-webapp https://youtube.com"
+"Mod+G"                             = "spawn:~/Scripts/launch-webapp https://github.com"
+"Mod+Shift+G"                       = "spawn:~/Scripts/launch-webapp https://mail.google.com"
+"Mod+Shift+W"                       = "spawn:~/Scripts/launch-webapp https://web.whatsapp.com"
+"Mod+X"                             = "spawn:~/Scripts/launch-webapp https://x.com"
+"Mod+Backslash"                     = "spawn:~/Scripts/launch-webapp https://devhints.io"
+"Mod+Shift+I"                       = "spawn:foot --app-id='webapp-list' -e ~/Scripts/webapp-remove"
+"Mod+Alt+Space"                     = "spawn:~/Scripts/launch-webapp https://heyamit.dev"
+"Mod+I"                             = "spawn:noctalia msg caffeine-toggle"
+
+# ─── Desktop & Theme ───
+"Ctrl+Alt+Space"                    = "spawn:noctalia msg wallpaper-random"
+"Mod+Ctrl+Shift+Space"              = "spawn:noctalia msg panel-toggle wallpaper"
+"Mod+Alt+Right"                     = "spawn:noctalia msg wallpaper-next"
+"Mod+Alt+Left"                      = "spawn:noctalia msg wallpaper-previous"
+"Mod+Alt+T"                         = "spawn:noctalia msg theme-mode-toggle"
+
+# ─── Utilities ───
+"Alt+comma"                         = "spawn:cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"
+"Alt+period"                        = "spawn:~/Scripts/fuzzel-emoji"
+"Mod+Backspace"                     = "spawn:~/Scripts/toggle-terminal-transparency"
+"Mod+Shift+M"                       = "spawn:~/Scripts/beats"
+"Mod+Shift+Backspace"               = "spawn:~/Scripts/run-scrcpy mirror"
+"Mod+Ctrl+Backspace"                = "spawn:~/Scripts/run-scrcpy webcam"
+"Mod+Alt+N"                         = "spawn:~/Scripts/toggle-wlsunset"
+"Print"                             = "spawn:hyprpicker -a"
+"Mod+Alt+E"                         = "spawn:env QT_QPA_PLATFORM=xcb ~/Android/Sdk/emulator/emulator -avd Pixel_9_Pro &"
+
+# ─── System & Notifications ───
+"Mod+Shift+Space"                   = "spawn:noctalia msg bar-toggle"
+"Mod+Period"                        = "spawn:noctalia msg panel-toggle control-center"
+"Mod+Comma"                         = "spawn:noctalia msg panel-toggle control-center system"
+"Mod+N"                             = "spawn:noctalia msg panel-toggle control-center notifications"
+"Mod+Ctrl+N"                        = "spawn:noctalia msg notification-clear-active"
+"Mod+Alt+W"                         = "spawn:noctalia msg panel-toggle control-center weather"
+"Mod+Shift+N"                       = "spawn:noctalia msg notification-dnd-toggle"
+
+# ─── Screenshots & Recording ───
+"Mod+P"                             = "spawn:noctalia msg screenshot-fullscreen"
+"Mod+Shift+P"                       = "spawn:noctalia msg screenshot-region"
+"Mod+Alt+P"                         = "spawn:noctalia msg screenshot-annotate"
+"Mod+R"                             = "spawn:~/Scripts/screenrecord --with-desktop-audio"
+"Mod+Shift+R"                       = "spawn:~/Scripts/screenrecord --with-microphone-audio"
+"Mod+Alt+R"                         = "spawn:~/Scripts/screenrecord --with-desktop-audio --region"
+
+# ─── Session & Power ───
+"Mod+Alt+L"                         = "spawn:swaylock"
+"Mod+Escape"                        = "spawn:~/Scripts/powermenu"
+"Ctrl+Alt+Delete"                   = { action = "session-quit", repeat = false }
+"Mod+Shift+Escape"                  = { action = "shortcuts-inhibit-toggle", allow_when_inhibited = true, repeat = false }
+
+# ─── Monitor Toggles ───
+"Ctrl+Shift+1"                      = "output-toggle:eDP-1"
+"Ctrl+Shift+2"                      = "output-toggle:HDMI-A-1"
+
+# ─── Audio Controls ───
+"Alt+V"                             = { action = "spawn:voxtype record toggle", repeat = false }
+"XF86AudioRaiseVolume"              = { action = "spawn:wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+", allow_when_locked = true }
+"XF86AudioLowerVolume"              = { action = "spawn:wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-", allow_when_locked = true }
+"XF86AudioMute"                     = { action = "spawn:wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle", allow_when_locked = true }
+"XF86AudioMicMute"                  = { action = "spawn:wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle", allow_when_locked = true }
+"Mod+XF86AudioMute"                 = { action = "spawn:~/Scripts/audio-switch", allow_when_locked = true }
+
+# ─── Media Controls ───
+"Mod+F10"                           = { action = "spawn:playerctl previous", allow_when_locked = true }
+"Mod+F11"                           = { action = "spawn:playerctl play-pause", allow_when_locked = true }
+"Mod+F12"                           = { action = "spawn:playerctl next", allow_when_locked = true }
+
+# ─── Brightness Controls ───
+"XF86MonBrightnessUp"               = { action = "spawn:brightnessctl --class=backlight set +10%", allow_when_locked = true }
+"XF86MonBrightnessDown"             = { action = "spawn:brightnessctl --class=backlight set 10%-", allow_when_locked = true }
+"Mod+Alt+XF86AudioRaiseVolume"      = { action = "spawn:brightnessctl --class=backlight set +10%", allow_when_locked = true }
+"Mod+Alt+XF86AudioLowerVolume"      = { action = "spawn:brightnessctl --class=backlight set 10%-", allow_when_locked = true }
+"Mod+XF86AudioRaiseVolume"          = { action = "spawn:ddcutil setvcp 10 + 10", allow_when_locked = true }
+"Mod+XF86AudioLowerVolume"          = { action = "spawn:ddcutil setvcp 10 - 10", allow_when_locked = true }
+
+# ─── Window Management ───
+"Mod+Q"                             = { action = "window-close", repeat = false }
+"Mod+V"                             = { action = "window-toggle-floating", repeat = false }
+"Mod+F"                             = { action = "window-toggle-maximize", repeat = false }
+"Alt+F"                             = { action = "window-toggle-fullscreen", repeat = false }
+"Mod+Shift+C"                       = "column-center"
+"Mod+BracketLeft"                   = "window-consume-or-expel-left"
+"Mod+BracketRight"                  = "window-consume-or-expel-right"
+"Mod+Ctrl+P"                        = { action = "window-toggle-pinned", repeat = false }
+"Mod+Shift+T"                       = { action = "window-focus-switch-floating", repeat = false }
+"Mod+F1"                            = "cheatsheet-toggle"
+
+# ─── Window Focus ───
+"Mod+H"                             = "window-focus-left"
+"Mod+L"                             = "window-focus-right"
+"Mod+K"                             = "window-focus-or-workspace-up"
+"Mod+J"                             = "window-focus-or-workspace-down"
+"Mod+Left"                          = "window-focus-left"
+"Mod+Right"                         = "window-focus-right"
+"Mod+Up"                            = "window-focus-up"
+"Mod+Down"                          = "window-focus-down"
+
+# ─── Window Movement ───
+"Mod+Ctrl+H"                        = "column-move-left"
+"Mod+Ctrl+L"                        = "column-move-right"
+"Mod+Ctrl+K"                        = "window-move-or-workspace-up"
+"Mod+Ctrl+J"                        = "window-move-or-workspace-down"
+"Mod+Ctrl+Left"                     = "column-move-left"
+"Mod+Ctrl+Right"                    = "column-move-right"
+"Mod+Ctrl+Up"                       = "window-move-up"
+"Mod+Ctrl+Down"                     = "window-move-down"
+
+# ─── Monitor Focus & Movement ───
+"Mod+Shift+H"                       = "output-focus-left"
+"Mod+Shift+L"                       = "output-focus-right"
+"Mod+Shift+K"                       = "output-focus-up"
+"Mod+Shift+J"                       = "output-focus-down"
+"Mod+Shift+Ctrl+H"                  = "column-move-to-output-left"
+"Mod+Shift+Ctrl+L"                  = "column-move-to-output-right"
+"Mod+Shift+Ctrl+K"                  = "column-move-to-output-up"
+"Mod+Shift+Ctrl+J"                  = "column-move-to-output-down"
+
+# ─── Workspaces ───
+"Mod+1"                             = "workspace-switch:1"
+"Mod+2"                             = "workspace-switch:2"
+"Mod+3"                             = "workspace-switch:3"
+"Mod+4"                             = "workspace-switch:4"
+"Mod+5"                             = "workspace-switch:5"
+"Mod+6"                             = "workspace-switch:6"
+"Mod+7"                             = "workspace-switch:7"
+"Mod+8"                             = "workspace-switch:8"
+"Mod+9"                             = "workspace-switch:9"
+"Mod+Shift+1"                       = "window-move-to-workspace:1"
+"Mod+Shift+2"                       = "window-move-to-workspace:2"
+"Mod+Shift+3"                       = "window-move-to-workspace:3"
+"Mod+Shift+4"                       = "window-move-to-workspace:4"
+"Mod+Shift+5"                       = "window-move-to-workspace:5"
+"Mod+Shift+6"                       = "window-move-to-workspace:6"
+"Mod+Shift+7"                       = "window-move-to-workspace:7"
+"Mod+Shift+8"                       = "window-move-to-workspace:8"
+"Mod+Shift+9"                       = "window-move-to-workspace:9"
+"Mod+Tab"                           = "workspace-previous"
+"Mod+O"                             = { action = "overview-toggle", repeat = false }
+
+# ─── Scratchpad ───
+"Mod+S"                             = { action = "scratchpad-toggle:term", repeat = false }
+"Mod+Shift+S"                       = { action = "window-toggle-scratchpad:term", repeat = false }
+"Mod+Ctrl+S"                        = { action = "window-restore-from-scratchpad:term", repeat = false }
+"Mod+Grave"                         = "scratchpad-focus-next:term"
+
+# ─── Mouse Wheel ───
+"Mod+WheelDown"                     = { action = "workspace-next", cooldown_ms = 150 }
+"Mod+WheelUp"                       = { action = "workspace-previous", cooldown_ms = 150 }
+"Mod+Ctrl+WheelDown"                = { action = "column-move-to-workspace-next", cooldown_ms = 150 }
+"Mod+Ctrl+WheelUp"                  = { action = "column-move-to-workspace-previous", cooldown_ms = 150 }
+"Mod+WheelRight"                    = "window-focus-right"
+"Mod+WheelLeft"                     = "window-focus-left"
+"Mod+Ctrl+WheelRight"               = "column-move-right"
+"Mod+Ctrl+WheelLeft"                = "column-move-left"
+"Mod+Shift+WheelDown"               = "window-focus-right"
+"Mod+Shift+WheelUp"                 = "window-focus-left"
+"Mod+Ctrl+Shift+WheelDown"          = "column-move-right"
+"Mod+Ctrl+Shift+WheelUp"            = "column-move-left"
+
+# ─── Tab Groups ───
+"Mod+W"                             = { action = "column-toggle-tabbed", repeat = false }
+"Alt+H"                             = "column-focus-tab-previous"
+"Alt+L"                             = "column-focus-tab-next"
+
+# ─── Window Resizing ───
+"Mod+Minus"                         = "window-modify-primary-extent:-0.1"
+"Mod+Equal"                         = "window-modify-primary-extent:0.1"
+"Mod+Shift+Minus"                   = "window-modify-secondary-extent:-0.1"
+"Mod+Shift+Equal"                   = "window-modify-secondary-extent:0.1"
+
+
+# ╭──────────────────────────────────────────────────────────╮
+# │                          LAYOUT                          │
+# ╰──────────────────────────────────────────────────────────╯
+# Docs: https://docs.noctalia.dev/umbriel/layout/
+[layout]
+gap = 0
+extent_presets = [0.333, 0.5, 0.667]
+
+[layout.scrolling]
+default_extent_fraction = 0.5
+
+
+# ╭──────────────────────────────────────────────────────────╮
+# │                WINDOW & SCRATCHPAD RULES                 │
+# ╰──────────────────────────────────────────────────────────╯
+# Docs: https://docs.noctalia.dev/umbriel/window-rules/
+
+[[window_rule]]
+blur = true
+blur_optimized = false
+
+[[window_rule]]
+default_maximize = true
+
+[[window_rule]]
+match.app_id = "^foot$"
+default_maximize = false
+default_floating = false
+
+[[window_rule]]
+match.app_id = "^(rmpc-music|cliamp-music|toofan-tui|btop-system|yazi-files|webapp-list|gh-dash)$"
+default_floating = true
+default_position = { x = 0, y = 0, anchor = "center" }
+
+[[window_rule]]
+match.app_id = "^dev.noctalia.Noctalia$"
+default_floating = true
+default_floating_size_px = { width = 1020, height = 900 }
+
+[[window_rule]]
+match.app_id = "^dev.noctalia.UmbrielSharePicker$"
+default_floating = true
+default_floating_size_px = { width = 800, height = 600 }
+
+[[window_rule]]
+match.title = "^(Picture-in-Picture|Picture in picture)$"
+default_floating = true
+default_maximize = false
+default_position = { x = 20, y = 20, anchor = "bottom_right" }
+
+[[window_rule]]
+match.title = "^notificationtoasts_.+_desktop"
+default_position = { x = 0, y = 0, anchor = "bottom_right" }
+default_focused = false
+default_pinned = true
+
+[[scratchpad]]
+name = "term"
+spawn_when_empty = "foot --app-id scratchpad-term"
+
+[[window_rule]]
+match.app_id = "^scratchpad-term$"
+default_scratchpad = "term"
+
+
+
+
+# ╭──────────────────────────────────────────────────────────╮
+# │                       LAYER RULES                        │
+# ╰──────────────────────────────────────────────────────────╯
+# Docs: https://docs.noctalia.dev/umbriel/layer-rules/
+[[layer_rule]]
+match.namespace = "^noctalia-(bar-[^\"]+|notification|dock|panel|attached-panel|osd|desktop-widget-[^\"]*)$"
+blur = true
+blur_ignore_alpha = 0.5
+blur_popups = true
+blur_optimized = false
+
+
+# ╭──────────────────────────────────────────────────────────╮
+# │                       HOT CORNERS                        │
+# ╰──────────────────────────────────────────────────────────╯
+# Animation: https://docs.noctalia.dev/umbriel/animation/
+[hot_corners.top_left]
+enabled = true
+delay_ms = 0
+action = "overview-toggle"
+
+
+
+# ╭──────────────────────────────────────────────────────────╮
+# │                   ANIMATIONS & BORDERS                   │
+# ╰──────────────────────────────────────────────────────────╯
+# Clean, minimal, fast animations and Niri-style sharp borders
+
+[animation]
+enabled = true
+duration_ms = 120
+curve = "easeout"
+
+[animation.scratchpad]
+duration_ms = 40
+curve = "linear"
+
+[[window_rule]]
+border_width = 1
+corner_radius = 0
+border_color_focused = "#ffffff66"
+border_color_unfocused = "#ffffff11"
+
+
+# Make overview animations fast like the rest
+[animation.overview]
+curve = "easeout"
+workspace_curve = "easeout"
+
+
+
+# ╭──────────────────────────────────────────────────────────╮
+# │                         TAB BAR                          │
+# ╰──────────────────────────────────────────────────────────╯
+[appearance.tab_bar]
+position = "bottom"
+height = 18
+font = "sans 9"
+padding = 0
+tab_gap = 1
+corner_radius = 0
+title_align = "left"
+title_format = " {title} |"
+
+[colors.tab_bar]
+background = "#282830FF"
+text = "#A0A0AAFF"
+active = "#5C5C66FF"
+active_text = "#FFFFFFFF"
+active_unfocused = "#3E3E48FF"
+active_unfocused_text = "#D0D0D0FF"
+urgent = "#FF6B6BFF"
+urgent_text = "#141419FF"

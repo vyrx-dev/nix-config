@@ -17,7 +17,7 @@ exec systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP PAT
 
 exec kanshi
 exec_always kanshictl reload
-# exec waybar
+exec waybar
 exec mako
 exec kdeconnect-indicator
 exec blueman-applet
@@ -69,7 +69,7 @@ exec swayidle -w \
 # ╭───────────────────────────────────────────────────────────────────────╮
 # │ APPEARANCE & BEHAVIOR                                                 │
 # ╰───────────────────────────────────────────────────────────────────────╯
-client.focused #4c7899 #285577 #ffffff #4c7899 #4c7899
+client.focused #718096 #404552 #f7fafc #718096 #718096
 
 gaps inner 5
 smart_gaps on
@@ -160,6 +160,7 @@ bindsym Alt+W                                exec foot --title='wifitui' -e wifi
 bindsym Alt+N                                exec foot -e nvim
 bindsym Alt+Escape                           exec foot -e tmux a
 bindsym Alt+I                                exec ~/Scripts/switch-waybar-nix
+bindsym Alt+D                                exec foot -e lazydocker
 
 # ─── Web Applications ───
 bindsym $mod+a                               exec ~/Scripts/launch-webapp https://chatgpt.com
@@ -167,7 +168,7 @@ bindsym $mod+Alt+a                           exec ~/Scripts/launch-webapp https:
 bindsym $mod+Shift+a                         exec ~/Scripts/launch-webapp https://gemini.google.com
 bindsym $mod+T                               exec ~/Scripts/launch-webapp https://app.todoist.com/app
 bindsym $mod+Y                               exec ~/Scripts/launch-webapp https://youtube.com
-bindsym $mod+G                               exec ~/Scripts/launch-webapp https://github.com
+bindsym $mod+G                               exec ~/Scripts/launch-webapp https://github.com/feed
 bindsym $mod+X                               exec ~/Scripts/launch-webapp https://X.com
 bindsym $mod+Shift+W                         exec ~/Scripts/launch-webapp https://web.whatsapp.com
 bindsym $mod+Shift+G                         exec ~/Scripts/launch-webapp https://mail.google.com
@@ -196,8 +197,8 @@ bindsym $mod+Shift+P                         exec ~/Scripts/screenshot fullscree
 bindsym Alt+P                                exec hyprpicker -a
 
 # ─── Bar ───
-# bindsym $mod+Shift+Space exec ~/Scripts/toggle-waybar
-bindsym $mod+Shift+Space                     bar mode toggle
+bindsym $mod+Shift+Space exec ~/Scripts/toggle-waybar
+# bindsym $mod+Shift+Space                     bar mode toggle
 
 
 # ─── Mobile ───
@@ -229,7 +230,7 @@ bindsym --locked                             XF86AudioMute exec pactl set-sink-m
 bindsym --locked                             XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
 bindsym --locked                             XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
 bindsym --locked                             XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
-bindsym Alt+V                                exec voxtype record toggle
+bindsym $mod+period                                exec voxtype record toggle
 bindsym $mod+Alt+m                           exec foot --title='cliamp-music' -e cliamp
 bindsym $mod+XF86AudioMute                   exec ~/Scripts/audio-switch
 
@@ -322,9 +323,9 @@ mode "resize" {
 # ╰───────────────────────────────────────────────────────────────────────╯
 include /etc/sway/config.d/*
 
-bar {
-    position bottom
-    pango_markup enabled
-    tray_padding 1
-    status_command $HOME/.config/sway/sway-status.sh
-}
+# bar {
+#     position bottom
+#     pango_markup enabled
+#     tray_padding 1
+#     status_command $HOME/.config/sway/sway-status.sh
+# }

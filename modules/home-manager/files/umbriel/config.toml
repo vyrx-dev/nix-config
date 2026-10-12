@@ -24,8 +24,18 @@ files = []
 # ╰──────────────────────────────────────────────────────────╯
 
 [general]
-autostart = ["noctalia"]
-# xwayland = false
+autostart = [
+    "noctalia",
+    "wl-clip-persist --clipboard regular",
+    "wl-paste --watch cliphist store",
+    "kdeconnect-indicator"
+]
+xwayland = true
+mod_key = "Super"
+xwayland_native_resolution = false
+show_cheatsheet = false
+focus_on_activate = false
+honor_restored_maximize = false
 
 
 # ╭──────────────────────────────────────────────────────────╮
@@ -110,7 +120,7 @@ follows_mouse = true
 "Mod+T"                             = "spawn:~/Scripts/launch-webapp https://todoist.com"
 "Alt+C"                             = "spawn:~/Scripts/launch-webapp https://calendar.google.com"
 "Mod+Y"                             = "spawn:~/Scripts/launch-webapp https://youtube.com"
-"Mod+G"                             = "spawn:~/Scripts/launch-webapp https://github.com"
+"Mod+G"                             = "spawn:~/Scripts/launch-webapp https://github.com/feed"
 "Mod+Shift+G"                       = "spawn:~/Scripts/launch-webapp https://mail.google.com"
 "Mod+Shift+W"                       = "spawn:~/Scripts/launch-webapp https://web.whatsapp.com"
 "Mod+X"                             = "spawn:~/Scripts/launch-webapp https://x.com"
@@ -361,8 +371,11 @@ blur_optimized = false
 
 
 # ╭──────────────────────────────────────────────────────────╮
-# │                       HOT CORNERS                        │
+# │                  OVERVIEW & ANIMATIONS                   │
 # ╰──────────────────────────────────────────────────────────╯
+[overview]
+zoom = 0.3
+
 # Animation: https://docs.noctalia.dev/umbriel/animation/
 [hot_corners.top_left]
 enabled = true

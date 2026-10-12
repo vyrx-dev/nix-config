@@ -47,7 +47,9 @@ tooltip {
 #custom-screenrecording-indicator,
 #mpris,
 #clock,
+#custom-last-updated,
 #cpu,
+#temperature,
 #memory,
 #disk,
 #network,
@@ -59,6 +61,17 @@ tooltip {
   font-weight: 600;
 }
 
+/* cpu + temperature grouped */
+#cpu {
+  margin-right: 0;
+  padding-right: 3px;
+}
+
+#temperature {
+  margin-left: 0;
+  padding-left: 3px;
+}
+
 #tray,
 #custom-expand {
   padding: 0 4px;
@@ -66,8 +79,19 @@ tooltip {
   opacity: 1;
 }
 
-#network.disconnected,
+
 #battery.warning {
+  color: @waybar-warning;
+}
+
+#cpu.critical,
+#temperature.critical,
+#network.disconnected,
+#custom-last-updated.critical {
+  color: @waybar-danger;
+}
+
+#custom-last-updated.warning {
   color: @waybar-warning;
 }
 
@@ -76,10 +100,6 @@ tooltip {
 }
 
 #battery.critical {
-  color: @waybar-danger;
-}
-
-#custom-last-updated.critical {
   color: @waybar-danger;
 }
 

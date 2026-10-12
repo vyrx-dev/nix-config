@@ -19,15 +19,18 @@
       ];
       modules-center = ["mpris"];
       modules-right = [
-        "group/tray-drawer"
+        # "group/tray-drawer"
         "custom/screenrecording-indicator"
+        "custom/last-updated"
         "cpu"
+        "temperature"
         "memory"
         "disk"
         "network"
         "pulseaudio"
         "battery"
         "clock"
+        "tray"
       ];
 
       "custom/screenrecording-indicator" = {
@@ -76,18 +79,38 @@
         spacing = 4;
       };
 
+      "custom/last-updated" = {
+        exec = "~/.config/waybar/scripts/last-nix-update.sh";
+        return-type = "json";
+        interval = 1800;
+        signal = 8;
+        format = "{}";
+        tooltip = true;
+      };
+
       cpu = {
         interval = 2;
         format = "cpu {usage}%";
         tooltip = true;
-        on-click = "ghostty -e btop";
+        states = {
+          critical = 92;
+        };
+        on-click = "foot -e btop";
+      };
+
+      temperature = {
+        interval = 5;
+        thermal-zone = 0;
+        format = "{temperatureC}°C";
+        critical-threshold = 85;
+        tooltip = false;
       };
 
       memory = {
         interval = 2;
         format = "mem {used:0.1f}gb";
         tooltip-format = "{used:0.1f}G / {total:0.1f}G";
-        on-click = "ghostty -e btop";
+        on-click = "foot -e btop";
       };
 
       disk = {
@@ -95,7 +118,7 @@
         path = "/";
         format = "disk {percentage_used}%";
         tooltip-format = "{used} / {total} ({percentage_free}% free)";
-        on-click = "ghostty -e btop";
+        on-click = "foot -e btop";
       };
 
       network = {
@@ -106,12 +129,12 @@
         tooltip-format-ethernet = "⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}";
         tooltip-format-disconnected = "Disconnected";
         interval = 3;
-        on-click = "ghostty -e wifitui";
+        on-click = "foot -e wifitui";
       };
 
       pulseaudio = {
         format = "vol {volume}%";
-        on-click = "ghostty -e wiremix";
+        on-click = "foot -e wiremix";
         on-click-right = "pamixer -t";
         tooltip-format = "vol {volume}%";
         scroll-step = 5;
@@ -141,5 +164,38 @@
     };
 
     style = builtins.readFile ./files/waybar/style.css;
+  };
+
+  home.file = {
+    ".config/waybar/scripts/last-nix-update.sh" = {
+      executable = true;
+      text = ''
+        #!/usr/bin/env bash
+        # flake.lock mtime, so `nixos-rebuild switch` doesn't reset it
+        lock=/etc/nixos/flake.lock
+        ts=$(stat -c %Y "$lock" 2>/dev/null)
+        [ -n "$ts" ] || exit 0
+
+        now=$(date +%s)
+        days=$(( (now - ts) / 86400 ))
+        if [ "$days" -eq 0 ]; then
+          text="$(( (now - ts) / 3600 ))h"
+        else
+          text="''${days}d"
+        fi
+
+        if [ "$days" -lt 7 ]; then
+          class=ok
+        elif [ "$days" -lt 14 ]; then
+          class=warning
+        else
+          class=critical
+        fi
+
+        icon=$(printf '\xef\x8b\x9c')
+        printf '{"text":"%s  %s","class":"%s","tooltip":"last flake update: %s"}\n' \
+          "$icon" "$text" "$class" "$(date -d @"$ts" '+%a %d %b %Y %H:%M')"
+      '';
+    };
   };
 }

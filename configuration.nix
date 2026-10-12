@@ -16,6 +16,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.initrd.luks.devices."luks-7428c180-79d2-469a-83e0-39d1cb4366c5".device = "/dev/disk/by-uuid/7428c180-79d2-469a-83e0-39d1cb4366c5";
+  boot.kernelModules = ["xpad"];
 
   # ╭───────────────────────────────────────────────────────────────────────╮
   # │ NETWORKING                                                            │
@@ -57,6 +58,9 @@
   # Cap battery charge at 60% to reduce wear
   services.udev.extraRules = ''
     ACTION=="add", KERNEL=="BAT0", SUBSYSTEM=="power_supply", ATTR{charge_control_end_threshold}="60"
+
+    # Fix for Cosmic Byte Blitz controller disconnecting from Steam
+    ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="05ac", ATTR{idProduct}=="033e", RUN+="${pkgs.bash}/bin/sh -c 'echo 05ac 033e > /sys/bus/usb/drivers/xpad/new_id'"
   '';
 
   services.blueman.enable = true;
@@ -198,7 +202,8 @@
     enable = true;
     settings = {
       initial_session = {
-        command = "${pkgs.umbriel}/bin/start-umbriel";
+        command = "sway";
+        # command = "${pkgs.umbriel}/bin/start-umbriel";
         user = "vyrx";
       };
       default_session = {
@@ -217,9 +222,11 @@
     extraGroups = ["video"];
   };
 
-  # tuigreet actually stores --remember state here, not in $HOME
   systemd.tmpfiles.rules = [
+    # tuigreet stores --remember state here, not in $HOME
     "d /var/cache/tuigreet 0755 greeter greeter -"
+    # cap battery charge at 60%
+    "w /sys/class/power_supply/BAT0/charge_control_end_threshold - - - - 60"
   ];
 
   # ╭───────────────────────────────────────────────────────────────────────╮
@@ -425,6 +432,7 @@
 
     # ── Development Tools ────────────────────────────────────────────────
     github-cli
+    usbutils
     gh-dash
     lazygit
     cmake
@@ -450,6 +458,12 @@
     hadolint
     lazydocker
     gnome-boxes
+
+    # ── Rust ─────────────────────────────────────────────────────────────
+    rustc
+    cargo
+    rustfmt
+    rust-analyzer
 
     # ── Media ────────────────────────────────────────────────────────────
     mpv
@@ -484,6 +498,7 @@
     wine
     lutris
     mangohud
+    ludusavi
 
     # ── System Utilities ─────────────────────────────────────────────────
     btop

@@ -84,7 +84,7 @@
         return-type = "json";
         interval = 1800;
         signal = 8;
-        format = "{}";
+        format = " {}";
         tooltip = true;
       };
 
@@ -164,14 +164,14 @@
     };
 
     style = builtins.readFile ./files/waybar/style.css;
-  };
-
-  home.file = {
+  };  home.file = {
     ".config/waybar/scripts/last-nix-update.sh" = {
       executable = true;
       text = ''
         #!/usr/bin/env bash
-        # flake.lock mtime, so `nixos-rebuild switch` doesn't reset it
+        # Days since the last `nix flake update`. Reads the mtime of flake.lock,
+        # which is the moment the lock was last rewritten, so it answers "when
+        # did I last update" rather than "how old is the newest input".
         lock=/etc/nixos/flake.lock
         ts=$(stat -c %Y "$lock" 2>/dev/null)
         [ -n "$ts" ] || exit 0
@@ -192,9 +192,8 @@
           class=critical
         fi
 
-        icon=$(printf '\xef\x8b\x9c')
-        printf '{"text":"%s  %s","class":"%s","tooltip":"last flake update: %s"}\n' \
-          "$icon" "$text" "$class" "$(date -d @"$ts" '+%a %d %b %Y %H:%M')"
+        printf '{"text":"%s","class":"%s","tooltip":"last flake update: %s"}\n' \
+          "$text" "$class" "$(date -d @"$ts" '+%a %d %b %Y %H:%M')"
       '';
     };
   };

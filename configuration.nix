@@ -416,6 +416,7 @@
     zoxide
     yazi
     jq
+    zip
     wiremix
     wifitui
 

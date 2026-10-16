@@ -49,7 +49,6 @@
         }
 
         ./configuration.nix
-        ./modules/nixos
       ];
     };
   };

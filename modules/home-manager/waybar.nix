@@ -84,7 +84,7 @@
         return-type = "json";
         interval = 1800;
         signal = 8;
-        format = " {}";
+        format = "  {}";
         tooltip = true;
       };
 
@@ -178,11 +178,7 @@
 
         now=$(date +%s)
         days=$(( (now - ts) / 86400 ))
-        if [ "$days" -eq 0 ]; then
-          text="$(( (now - ts) / 3600 ))h"
-        else
-          text="''${days}d"
-        fi
+        text="''${days}d"
 
         if [ "$days" -lt 7 ]; then
           class=ok
@@ -192,8 +188,8 @@
           class=critical
         fi
 
-        printf '{"text":"%s","class":"%s","tooltip":"last flake update: %s"}\n' \
-          "$text" "$class" "$(date -d @"$ts" '+%a %d %b %Y %H:%M')"
+        printf '{"text":"%s","class":"%s","tooltip":"last flake update: %s (%s ago)"}\n' \
+          "$text" "$class" "$(date -d @"$ts" '+%a %d %b %Y %H:%M')" "$text"
       '';
     };
   };

@@ -8,7 +8,7 @@
     ./sway.nix
     ./waybar.nix
     ./mako.nix
-    # ./kitty.nix
+    ./kitty.nix
     ./foot.nix
     ./fuzzel.nix
     ./starship.nix

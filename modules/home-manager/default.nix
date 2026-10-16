@@ -5,7 +5,6 @@
     ./mpdscribble.nix
     ./rmpc.nix
     ./niri.nix
-    ./umbriel.nix
     ./sway.nix
     ./waybar.nix
     ./mako.nix

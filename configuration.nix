@@ -15,7 +15,7 @@
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.initrd.luks.devices."luks-7428c180-79d2-469a-83e0-39d1cb4366c5".device = "/dev/disk/by-uuid/7428c180-79d2-469a-83e0-39d1cb4366c5";
+  boot.initrd.luks.devices."luks-44c175f5-b2b4-4be8-b88f-11279ca0150f".device = "/dev/disk/by-uuid/44c175f5-b2b4-4be8-b88f-11279ca0150f";
   boot.kernelModules = ["xpad"];
 
   # ╭───────────────────────────────────────────────────────────────────────╮

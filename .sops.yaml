@@ -1,0 +1,10 @@
+keys:
+  - &host age137pwrpnsj7gnp0ry7kc2w973wkdt9y4se8sruzfzvp66pmz44gfqszrevm
+  - &admin age14a47zatsqpwzy6arkyvx3s28ltpexpxe4y5jhw0edw6nfdu35ypqfq8hmf
+
+creation_rules:
+  - path_regex: secrets/.*\.yaml$
+    key_groups:
+      - age:
+          - *host
+          - *admin

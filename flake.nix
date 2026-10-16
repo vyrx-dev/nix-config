@@ -13,6 +13,11 @@
     voxtype.url = "github:peteonrails/voxtype";
     herdr.url = "github:herdrdev/herdr-nix";
     codex-desktop-linux.url = "github:ilysenko/codex-desktop-linux";
+
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -23,6 +28,7 @@
     ai-usagebar,
     voxtype,
     codex-desktop-linux,
+    sops-nix,
     ...
   } @ inputs: {
     nixosConfigurations."nixos-btw" = nixpkgs.lib.nixosSystem {
@@ -30,6 +36,7 @@
       specialArgs = {inherit inputs;};
       modules = [
         spicetify-nix.nixosModules.default
+        sops-nix.nixosModules.sops
 
         home-manager.nixosModules.home-manager
         {

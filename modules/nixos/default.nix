@@ -19,6 +19,7 @@
     ./gaming.nix
     ./spicetify.nix
     ./virtualisation.nix
+    ./secrets.nix
     ./packages.nix
     ./nix.nix
     ./codex-desktop.nix

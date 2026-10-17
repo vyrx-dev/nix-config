@@ -3,16 +3,8 @@
     enable = true;
 
     shellInit = ''
-      # PATH
+      # Tools come from the Nix store; this machine's scripts live in ~/Scripts.
       fish_add_path $HOME/Scripts
-      fish_add_path $HOME/dev-tools/flutter/bin
-      fish_add_path $HOME/.pub-cache/bin
-      fish_add_path $HOME/.spicetify/bin
-      fish_add_path $HOME/Downloads/Windsurf
-      fish_add_path $HOME/go/bin
-      fish_add_path $HOME/.local/bin
-      fish_add_path $HOME/.cargo/bin
-      fish_add_path $HOME/.kilo/bin
     '';
 
     interactiveShellInit = ''
@@ -53,39 +45,26 @@
       devices = "~/Android/Sdk/emulator/emulator -list-avds";
       rip = ''yt-dlp -x --audio-format="mp3"'';
       stars = "gh repo list vyrx-dev --limit 1000 --json stargazerCount | jq '[.[].stargazerCount] | add'";
-      last-updated = "grep -i \"full system upgrade\" /var/log/pacman.log | tail -n 1";
-      pwreset = "faillock --reset --user vyrx";
-      cache = "du -sh /var/cache/pacman/pkg .cache/paru";
-      folders = "du -h --max-depth=1";
-      pp = "paru -Slq | fzf --multi --preview 'paru -Sii {1}' --preview-window=down:55% | xargs -ro paru -S";
-      cleanup = "sudo pacman -Rns (pacman -Qdtq)";
-      mirrorfix = "sudo reflector --latest 20 --sort rate --save /etc/pacman.d/mirrorlist";
-      cleanc = "sudo pacman -Sc && yay -Sc";
-      tobash = "chsh $USER -s /usr/bin/bash && echo 'Log out and log back in for change to take effect.'";
-      tofish = "chsh $USER -s /usr/bin/fish && echo 'Log out and log back in for change to take effect.'";
+      # Flakes only see git-tracked files, so stage before switching.
+      # update-nix rewrites flake.lock, which is what the waybar update badge shows.
+      rebuild-nix = "git -C /etc/nixos add -A && nh os switch";
+      update-nix = "git -C /etc/nixos add -A && nh os switch --update";
     };
 
     shellAbbrs = {
       c = "code .";
-      nb = "sudo nixos-rebuild switch --flake";
-      n = "nvim /etc/nixos/configuration.nix";
       zz = "yazi";
       open = "thunar .";
       h = "history | grep ";
       fr = "flutter-watch";
       nd = "npm run dev";
       mr = "make run";
-      mp = "makepkg -si";
       lg = "lazygit";
       d = "docker";
       gits = "git status";
       gdd = "git diff --stat";
       ghp = ''gh repo create --private $(basename "$PWD") --source=. --description="desc" --push'';
       ghpp = ''git init; git add .; git commit -m "initial commit"; gh repo create --private $(basename "$PWD") --source=. --description="desc" --push'';
-      i = "sudo pacman -S";
-      un = "sudo pacman -Rns";
-      p = "paru -S";
-      up = "paru -Syu";
       t = "topgrade";
       tmuxk = "tmux kill-session";
       chx = "chmod +x";
@@ -96,12 +75,6 @@
       pg = "ping -c 10 google.com";
       bigfont = "setfont ter-132b";
       regfont = "setfont default8x16";
-      slsr = "sudo snapper -c root list";
-      slsh = "sudo snapper -c home list";
-      sdu = "sudo btrfs filesystem du -s /.snapshots/*";
-      sdelr = "sudo snapper -c root delete";
-      sdelh = "sudo snapper -c home delete --sync";
-      sbdel = "sudo btrfs subvolume delete";
     };
 
     functions = {

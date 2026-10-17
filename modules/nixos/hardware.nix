@@ -13,9 +13,4 @@
   services.blueman.enable = true;
   services.upower.enable = true;
   services.power-profiles-daemon.enable = true;
-
-  systemd.tmpfiles.rules = [
-    # cap battery charge at 60%
-    "w /sys/class/power_supply/BAT0/charge_control_end_threshold - - - - 60"
-  ];
 }

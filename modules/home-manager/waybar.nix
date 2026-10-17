@@ -80,7 +80,7 @@
       };
 
       "custom/last-updated" = {
-        exec = "~/.config/waybar/scripts/last-nix-update.sh";
+        exec = "~/Scripts/last-updated-nix";
         return-type = "json";
         interval = 1800;
         signal = 8;
@@ -164,33 +164,5 @@
     };
 
     style = builtins.readFile ./files/waybar/style.css;
-  };  home.file = {
-    ".config/waybar/scripts/last-nix-update.sh" = {
-      executable = true;
-      text = ''
-        #!/usr/bin/env bash
-        # Days since the last `nix flake update`. Reads the mtime of flake.lock,
-        # which is the moment the lock was last rewritten, so it answers "when
-        # did I last update" rather than "how old is the newest input".
-        lock=/etc/nixos/flake.lock
-        ts=$(stat -c %Y "$lock" 2>/dev/null)
-        [ -n "$ts" ] || exit 0
-
-        now=$(date +%s)
-        days=$(( (now - ts) / 86400 ))
-        text="''${days}d"
-
-        if [ "$days" -lt 7 ]; then
-          class=ok
-        elif [ "$days" -lt 14 ]; then
-          class=warning
-        else
-          class=critical
-        fi
-
-        printf '{"text":"%s","class":"%s","tooltip":"last flake update: %s (%s ago)"}\n' \
-          "$text" "$class" "$(date -d @"$ts" '+%a %d %b %Y %H:%M')" "$text"
-      '';
-    };
   };
 }

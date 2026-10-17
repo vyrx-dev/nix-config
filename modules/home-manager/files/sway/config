@@ -159,7 +159,6 @@ bindsym Alt+S                                exec foot --title='wiremix' -e wire
 bindsym Alt+W                                exec foot --title='wifitui' -e wifitui
 bindsym Alt+N                                exec foot -e nvim
 bindsym Alt+Escape                           exec foot -e tmux a
-bindsym Alt+I                                exec ~/Scripts/switch-waybar-nix
 bindsym Alt+D                                exec foot -e lazydocker
 
 # ─── Web Applications ───

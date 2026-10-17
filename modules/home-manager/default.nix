@@ -24,5 +24,6 @@
     ./voxtype.nix
     ./herdr.nix
     ./topgrade.nix
+    ./nh.nix
   ];
 }

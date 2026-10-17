@@ -25,5 +25,6 @@
     ./herdr.nix
     ./topgrade.nix
     ./nh.nix
+    ./scripts.nix
   ];
 }

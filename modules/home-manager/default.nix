@@ -14,6 +14,8 @@
     ./starship.nix
     # ./ghostty.nix
     ./fish.nix
+    ./direnv.nix
+    ./dirs.nix
     ./tmux.nix
     ./kanshi.nix
     ./swaylock.nix
@@ -22,6 +24,8 @@
     ./polkit.nix
     ./ai-usagebar.nix
     ./voxtype.nix
+    ./toofan.nix
+    ./gh-notify.nix
     ./herdr.nix
     ./topgrade.nix
     ./nh.nix

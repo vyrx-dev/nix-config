@@ -37,6 +37,27 @@
         "type": "github"
       }
     },
+    "flake-parts": {
+      "inputs": {
+        "nixpkgs-lib": [
+          "toofan",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1782949081,
+        "narHash": "sha256-vp6Y/Grm98ESt6ceOkWiHWyZRDV3J1RID4w+6NWK9yA=",
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "rev": "17c9d6cdfc60c64f4ee8d306f9bc0b4ccb51481e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "type": "github"
+      }
+    },
     "flake-utils": {
       "inputs": {
         "systems": "systems"
@@ -232,6 +253,7 @@
         "nixpkgs": "nixpkgs_4",
         "sops-nix": "sops-nix",
         "spicetify-nix": "spicetify-nix",
+        "toofan": "toofan",
         "voxtype": "voxtype"
       }
     },
@@ -331,6 +353,27 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
+        "type": "github"
+      }
+    },
+    "toofan": {
+      "inputs": {
+        "flake-parts": "flake-parts",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1791344890,
+        "narHash": "sha256-cxHYQjkLsyiACMJn/iPJAN2tgQ8OeC81LLn2/D/68jA=",
+        "owner": "vyrx-dev",
+        "repo": "toofan",
+        "rev": "86e52f3e9850680730749270b4449d9bd5577258",
+        "type": "github"
+      },
+      "original": {
+        "owner": "vyrx-dev",
+        "repo": "toofan",
         "type": "github"
       }
     },

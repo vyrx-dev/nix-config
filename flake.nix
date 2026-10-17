@@ -13,6 +13,10 @@
     voxtype.url = "github:peteonrails/voxtype";
     herdr.url = "github:herdrdev/herdr-nix";
     codex-desktop-linux.url = "github:ilysenko/codex-desktop-linux";
+    toofan = {
+      url = "github:vyrx-dev/toofan";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     sops-nix = {
       url = "github:Mic92/sops-nix";

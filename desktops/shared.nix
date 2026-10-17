@@ -1,5 +1,3 @@
-# Session infrastructure shared by every compositor: no Xorg, the common
-# portal, mimetype handlers, and Wayland session variables.
 {pkgs, ...}: {
   # Wayland-only; the nvidia videoDrivers set in graphics.nix still apply.
   services.xserver.enable = false;
@@ -16,12 +14,10 @@
     ];
   };
 
-  # Makes double-clicking an archive extract it in place. Nautilus does this
-  # automatically (gnome-autoar) only while it is the mimetype's default
-  # handler, so point every archive type at it. The list mirrors Nautilus' own
-  # MimeType= entries; leaving it out lets GIO pick any claimant, and e.g.
-  # zathura-cb also claims application/zip. Nautilus is installed by
-  # packages.nix and by programs.niri (useNautilus).
+  # Double-clicking an archive extracts it in place only while Nautilus is the
+  # mimetype's default handler (gnome-autoar), so every archive type points at
+  # it. The list mirrors Nautilus' MimeType= entries; otherwise GIO can pick a
+  # different claimant (zathura-cb also claims application/zip).
   xdg.mime.defaultApplications = {
     "application/x-7z-compressed" = "org.gnome.Nautilus.desktop";
     "application/x-7z-compressed-tar" = "org.gnome.Nautilus.desktop";

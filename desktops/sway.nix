@@ -1,7 +1,7 @@
-# programs.sway already sets up the portal: it enables xdg.portal.wlr and
-# writes xdg.portal.config.sway (ScreenCast/Screenshot -> wlr, everything else
-# -> gtk, per upstream wlroots-portals.conf). The only gap it leaves is the
-# wlr screencast chooser, added below.
+# programs.sway sets up the portal itself (xdg.portal.wlr plus
+# xdg.portal.config.sway: ScreenCast/Screenshot to wlr, the rest to gtk, per
+# upstream wlroots-portals.conf). The only gap is the wlr screencast chooser,
+# added below.
 {pkgs, ...}: {
   programs.sway = {
     enable = true;

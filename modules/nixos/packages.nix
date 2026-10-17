@@ -19,6 +19,8 @@
     bibata-cursors
     adwaita-icon-theme
     noctalia
+    pamixer # waybar volume right-click uses it
+    wtype # fuzzel-emoji script types into the focused window
 
     # ── Terminal & Shell ─────────────────────────────────────────────────
     tmux
@@ -61,8 +63,6 @@
     nodejs
     deno
     python3
-    python3Packages.flake8
-    python3Packages.black
     lua54Packages.luacheck
     stylua
     lua-language-server
@@ -76,6 +76,38 @@
     hadolint
     lazydocker
     gnome-boxes
+    clippy
+    delve
+    golangci-lint
+    gotools
+    gdb
+    ninja
+    pkg-config
+    sccache
+    mold
+    hyperfine
+    tokei
+    just
+    uv
+    ruff
+    pyright
+    vtsls
+    pnpm
+    dive
+    xh
+    grpcurl
+    websocat
+    pgcli
+    delta
+    gitleaks
+    yq
+    ast-grep
+    mkcert
+    tlrc
+    sops
+    age
+    ssh-to-age
+    android-tools
 
     # ── Rust ─────────────────────────────────────────────────────────────
     rustc

@@ -11,6 +11,9 @@
       libxcursor
       libxrandr
       libxi
+      stdenv.cc.cc.lib
+      zlib
+      openssl
     ];
   };
 
@@ -20,10 +23,6 @@
       trusted-users = ["root" "vyrx"];
       auto-optimise-store = true;
     };
-    gc = {
-      automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than 14d";
-    };
+    # Generation cleanup is handled by nh clean (weekly, keeps 3 generations).
   };
 }

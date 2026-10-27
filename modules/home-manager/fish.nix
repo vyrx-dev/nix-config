@@ -65,7 +65,6 @@
       gdd = "git diff --stat";
       ghp = ''gh repo create --private $(basename "$PWD") --source=. --description="desc" --push'';
       ghpp = ''git init; git add .; git commit -m "initial commit"; gh repo create --private $(basename "$PWD") --source=. --description="desc" --push'';
-      t = "topgrade";
       tmuxk = "tmux kill-session";
       chx = "chmod +x";
       x = "exit";

@@ -6,8 +6,8 @@
   services.udev.extraRules = ''
     ACTION=="add", KERNEL=="BAT0", SUBSYSTEM=="power_supply", ATTR{charge_control_end_threshold}="60"
 
-    # Fix for Cosmic Byte Blitz controller disconnecting from Steam
-    ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="05ac", ATTR{idProduct}=="033e", RUN+="${pkgs.bash}/bin/sh -c 'echo 05ac 033e > /sys/bus/usb/drivers/xpad/new_id'"
+    # Allow access to hidraw devices for WebHID (Orbit)
+    KERNEL=="hidraw*", SUBSYSTEM=="hidraw", MODE="0660", TAG+="uaccess"
   '';
 
   services.blueman.enable = true;

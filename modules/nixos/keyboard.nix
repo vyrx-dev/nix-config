@@ -7,6 +7,7 @@
       settings.main = {
         capslock = "overload(control, esc)";
         escape = "capslock";
+         rightshift = "rightshift"; # (keyd keeps RShift distinct)
       };
     };
   };

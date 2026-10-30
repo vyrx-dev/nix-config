@@ -4,9 +4,6 @@
 
   programs.steam = {
     enable = true;
-    # "Boot to Steam Big Picture" session; disabled so Steam doesn't show
-    # up as an option in the greetd/tuigreet display manager. Steam itself
-    # still works normally.
     gamescopeSession.enable = false;
     extraCompatPackages = with pkgs; [proton-ge-bin];
   };

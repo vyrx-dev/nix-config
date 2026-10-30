@@ -361,7 +361,7 @@ binds {
     Mod+Alt+M                           hotkey-overlay-title="rmpc" { spawn-sh "foot --title='cliamp-music' -e cliamp"; }
     Alt+T                               hotkey-overlay-title="Toofan" { spawn-sh "foot --title='toofan-tui' -e toofan"; }
     Alt+G                               hotkey-overlay-title="gh-dash" { spawn-sh "foot --title='gh-dash' -e gh-dash"; }
-    Alt+S                               hotkey-overlay-title="Volume Mixer" { spawn-sh "foot --title='wiremix' -e wiremix"; }
+    // Alt+S                               hotkey-overlay-title="Volume Mixer" { spawn-sh "foot --title='wiremix' -e wiremix"; }
     Alt+W                               hotkey-overlay-title="WiFi" { spawn-sh "foot --title='wifitui' -e wifitui"; }
     Alt+B                               hotkey-overlay-title="Books" { spawn "foliate"; }
     Alt+L                               hotkey-overlay-title="Suspend & Lock" { spawn-sh "systemctl suspend && swaylock"; }
@@ -392,7 +392,7 @@ binds {
 
     // ─── Utilities ───
     Alt+comma                           hotkey-overlay-title="Clipboard History" { spawn-sh "cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"; }
-    Alt+period                          hotkey-overlay-title="Emoji Picker" { spawn-sh "~/Scripts/fuzzel-emoji"; }
+    Alt+period                          hotkey-overlay-title="Emoji Picker" { spawn-sh "~/Scripts/fuzzel-emoji copy"; }
     Mod+Backspace                       hotkey-overlay-title="Terminal Transparency" { spawn-sh "~/Scripts/toggle-terminal-transparency"; }
     // Mod+Shift+Space                     hotkey-overlay-title="Toggle Waybar" { spawn-sh "~/Scripts/toggle-waybar"; }
     Mod+SHIFT+M                         hotkey-overlay-title="Online Music" { spawn-sh "~/Scripts/beats"; }

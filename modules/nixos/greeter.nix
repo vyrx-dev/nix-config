@@ -1,4 +1,8 @@
-{config, pkgs, ...}: {
+{
+  config,
+  pkgs,
+  ...
+}: {
   # Prevent accidental hard-shutdown on power button press
   services.logind.settings.Login.HandlePowerKey = "ignore";
 
@@ -7,7 +11,7 @@
     settings = {
       # Session greetd starts on boot; falls back to the tuigreet default_session.
       initial_session = {
-        command = "sway";
+        command = "niri-session";
         user = "vyrx";
       };
       default_session = {

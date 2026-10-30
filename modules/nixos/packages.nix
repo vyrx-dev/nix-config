@@ -128,6 +128,7 @@
 
     # ── Internet & Communication ─────────────────────────────────────────
     brave
+    google-chrome
     vesktop
     localsend
     telegram-desktop

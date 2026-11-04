@@ -48,6 +48,7 @@
 
     # ── AI Agents & Assistants ───────────────────────────────────────────
     opencode
+    opencode-desktop
     t3code
 
     # ── Development Tools ────────────────────────────────────────────────

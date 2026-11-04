@@ -5,6 +5,7 @@
     shellInit = ''
       # Tools come from the Nix store; this machine's scripts live in ~/Scripts.
       fish_add_path $HOME/Scripts
+      fish_add_path $HOME/.local/bin
     '';
 
     interactiveShellInit = ''

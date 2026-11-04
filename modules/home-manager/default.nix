@@ -22,6 +22,7 @@
     ./cursor.nix
     ./theme.nix
     ./polkit.nix
+    ./blueman.nix
     ./ai-usagebar.nix
     ./voxtype.nix
     ./toofan.nix

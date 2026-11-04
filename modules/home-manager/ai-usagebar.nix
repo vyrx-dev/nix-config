@@ -7,5 +7,8 @@
     # AI Usage Bar
     [antigravity]
     enabled = true
+
+    [opencode-go]
+    enabled = true
   '';
 }

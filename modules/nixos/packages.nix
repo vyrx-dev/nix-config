@@ -36,6 +36,7 @@
     yazi
     jq
     zip
+    unzip
     wiremix
     wifitui
 
@@ -117,7 +118,7 @@
     rust-analyzer
 
     # ── Media ────────────────────────────────────────────────────────────
-    mpv
+    (mpv.override {scripts = [mpvScripts.mpris];})
     yt-dlp
     cliamp
     obs-studio
